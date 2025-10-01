@@ -7,13 +7,18 @@ public class E8 {
 
         System.out.println("\nejercicio 08");
         Scanner sc = new Scanner(System.in);
-        System.out.println("Ingresar numero");
-        double numero = sc.nextDouble();
-        System.out.println("numero 1: " + numero);
         double numero1 = sc.nextDouble();
-        System.out.println("numero 2: " + numero 1);
+        System.out.println("numero 1: " + numero1);
+        double numero2 = sc.nextDouble();
+        System.out.println("numero 2: " + numero2);
 
-        double
+        double menor = Math.min(numero1, numero2);
+        double mayor = Math.max(numero1, numero2);
+        System.out.println("numeros en orden ascendente: " +  menor + " - " + mayor);
+
+
+
+
 
     }
 }
