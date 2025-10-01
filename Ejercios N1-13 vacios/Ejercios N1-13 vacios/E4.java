@@ -6,10 +6,10 @@ public class E4 {
         //Ejercicio 4: Escribe un programa que lea dos números, calcule y muestre el valor de sus suma, resta.
 
         System.out.println("\nejercicio 04");
-        Scanner sc2 = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
         System.out.println("ingresar primer numero");
-        double numero1 = sc2.nextDouble();
-        double numero2 = sc2.nextDouble();
+        double numero1 = sc.nextDouble();
+        double numero2 = sc.nextDouble();
 
         double suma = numero1 + numero2;
         double resta = numero1 - numero2;
