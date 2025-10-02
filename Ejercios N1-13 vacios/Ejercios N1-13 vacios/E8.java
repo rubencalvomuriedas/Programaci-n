@@ -7,6 +7,7 @@ public class E8 {
 
         System.out.println("\nejercicio 08");
         Scanner sc = new Scanner(System.in);
+        System.out.println("Ingresar numeros");
         double numero1 = sc.nextDouble();
         System.out.println("numero 1: " + numero1);
         double numero2 = sc.nextDouble();

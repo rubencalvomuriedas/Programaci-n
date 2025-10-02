@@ -17,7 +17,7 @@ public class E6 {
         System.out.println("el precio real es: " + precioR);
 
         double porcentaje = ((precioV - precioR) / precioV) *100.0;
-        System.out.println("porcentaje es: " + porcentaje);
+        System.out.println("porcentaje es: " + porcentaje + " % ");
 
 
     }
