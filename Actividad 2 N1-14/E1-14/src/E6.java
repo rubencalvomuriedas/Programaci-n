@@ -15,7 +15,7 @@ public class E6 {
         numero = sc.nextInt();
 
         System.out.println("");
-        for  (int i = 1; i <= numero; i++) {
+        for (int i = 1; i <= numero; i++) {
             System.out.println(i);
         }
 

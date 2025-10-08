@@ -8,13 +8,13 @@ public class E1 {
         mayor de edad” solo si lo somos.
 
          */
-        Scanner input = new Scanner (System.in);
+        Scanner sc = new Scanner (System.in);
 
         int edad;
 
 
         System.out.println("Por favor ingrese su edad actual: ");
-        edad = input.nextInt();
+        edad = sc.nextInt();
 
         if  (edad >= 18) {
             System.out.println("Eres mayor de edad");

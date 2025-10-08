@@ -6,9 +6,10 @@ public class E5 {
         Esta vez utiliza un contador sumando de 1 en 1:
          */
         System.out.println("Numero pares del 1 al 200:" );
-        for (int i = 2; i <= 200; i++) {
-            System.out.println("Numero " + i);
-
+        for (int i = 1; i <= 200; i++) {
+            if( i % 2 ==0 ) {
+                System.out.println("Numero " + i);
+            }
         }
 
     }
