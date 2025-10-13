@@ -10,18 +10,17 @@ public class E9 {
          */
 
         Scanner sc = new Scanner(System.in);
-
-        int hora;
+        int horas;
         int minutos;
         int segundos;
 
-        System.out.println("Ingrese la hor actual (1-24): ");
-        hora = sc.nextInt();
+        System.out.println("Ingrese la hora actual : ");
+        horas = sc.nextInt();
 
-        System.out.println("Ingrese los minutos actuales (1-60): ");
+        System.out.println("Ingrese los minutos : ");
         minutos = sc.nextInt();
 
-        System.out.println("Ingrese los segundos (1-60): ");
+        System.out.println("Ingrese los segundos : ");
         segundos = sc.nextInt();
 
         segundos++;
@@ -33,13 +32,13 @@ public class E9 {
 
         if (minutos == 60) {
             minutos = 0;
-            hora++;
+            horas++;
         }
 
-        if (hora == 60) {
-            hora = 0;
+        if (horas == 24) {
+            horas = 0;
         }
 
-        System.out.printf("La nueva hora es: " + hora +":"+ minutos+ ":" + segundos);
+        System.out.printf("La hora actual es: " + horas +":"+ minutos+ ":" + segundos);
     }
 }
