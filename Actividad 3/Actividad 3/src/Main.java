@@ -1,8 +1,6 @@
 import java.util.Scanner;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
+public class main {
     public static void main(String[] args) {
 
     /*
@@ -49,19 +47,101 @@ public class Main {
         int billete5 = cantidadInsertada / 5;
         cantidadInsertada %= 5;
 
-        if (billete500 > 0);
-        System.out.println("Billetes500: " + billete500);
-        if (billete200 >0);
-        System.ou.println("Billetes200: " + billete200);
-        if (billete100 >0);
-        System.out.println("Billetes100: " + billete100);
-        if (billete50 >0);
-        System.out.println("Billetes50: " + billete50);
-        if (billete20 >0);
-        System.out.println("Billetes20: " + billete20);
-        if (billete10 >0);
-        System.out.println("Billetes10: " + billete10);
-        if (billete5 >0);
-        System.out.println("Billetes5: " + billete5);
+        if (billete500 > 0) {
+            System.out.println("Billetes500: " + billete500);
+        }
+        if (billete200 >0) {
+            System.out.println("Billetes200: " + billete200);
+        }
+        if (billete100 >0) {
+            System.out.println("Billetes100: " + billete100);
+        }
+        if (billete50 >0) {
+            System.out.println("Billetes50: " + billete50);
+        }
+        if (billete20 >0) {
+            System.out.println("Billetes20: " + billete20);
+        }
+        if (billete10 >0) {
+            System.out.println("Billetes10: " + billete10);
+        }
+        if (billete5 >0) {
+            System.out.println("Billetes5: " + billete5);
+        }
     }
 }
+    public static void main (String[] args) {
+    Scanner sc = new Scanner(System.in);
+
+    String opcion = "";
+
+    double valor1;
+    double valor2;
+
+    do {
+    sc = new Scanner(System.in);
+
+        System.out.println("\n1. Sumar\n" +
+                                               "2. Restar\n" +
+                                               "3. Multiplicar\n" +
+                                               "4. Dividir\n" +
+                                               "5. Salir");
+        System.out.print("");
+    opcion = sc.nextLine();
+        switch (opcion) {
+            case "1":
+    sc = new Scanner(System.in);
+
+        System.out.println("Ingresa el valor del primer numero: ");
+    valor1 = sc.nextDouble();
+
+                            System.out.println("Ingresa el valor del segundo numero: ");
+    valor2 = sc.nextDouble();
+
+    double suma = valor1 + valor2;
+
+        System.out.println("\nEl resultado es: " + suma);
+        break;
+
+        case "2":
+    sc = new Scanner(System.in);
+        System.out.println("Ingresa el valor del primer numero: ");
+    valor1 = sc.nextDouble();
+        System.out.println("Ingresa el valor del segundo numero: ");
+    valor2 = sc.nextDouble();
+    double resta = valor1 - valor2;
+        System.out.println("\nEl resultado es: " + resta);
+        break;
+        case "3":
+    sc = new Scanner(System.in);
+
+        System.out.println("Ingresa el valor del primer numero: ");
+
+    valor1 = sc.nextDouble();
+        System.out.println("Ingresa el valor del segundo numero: ");
+    valor2 = sc.nextDouble();
+
+    double multiplicacion = valor1 * valor2;
+        System.out.println("\nEl resultado es: " + multiplicacion);
+        break;
+        case "4":
+    sc = new Scanner(System.in);
+        System.out.println("Ingresa el valor del primer numero: ");
+    valor1 = sc.nextDouble();
+        System.out.println("Ingresa el valor del segundo numero: ");
+    valor2 = sc.nextDouble();
+    double division = valor1 / valor2;
+    System.out.println("\nEl resultado es: " + division);
+    break;
+    case "5":
+    sc = new Scanner(System.in);
+    System.out.println("\nSaliendo del programa. Hasta pronto");
+    break;
+
+    default:
+        System.out.print("\nOpcion invalida. Por favor, intentelo de nuevo");
+        break;
+        }
+
+        } while (!opcion.equals("5"));
+    }
