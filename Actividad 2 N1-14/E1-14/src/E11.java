@@ -9,6 +9,6 @@ public class E11 {
     Scanner sc = new Scanner(System.in);
     boolean hayNegativos = false;
     for(int i =0; 1 < 10; i++);
-    System.out.println("introduce un numero distinto de cero:");
+
     }
 }

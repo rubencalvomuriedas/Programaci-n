@@ -12,7 +12,7 @@ public class E14 {
         double salarioBruto;
         double horasTrabajadas;
 
-        double tarifaHoras;
+        double tarifaHoras = 25.0;
 
         double impuestos;
 
@@ -36,9 +36,9 @@ public class E14 {
         if (salarioBruto <= 500){
             impuestos = 0;
         } else if (salarioBruto <= 900){
-            impuestos = (salarioBruto - 500) * 0.25;
+            impuestos = (salarioBruto - 500) * 0.75;
         } else {
-            impuestos = (400 * 0.25) + ((salarioBruto - 900) * 0.45);
+            impuestos = (400 * 0.75) + ((salarioBruto - 900) * 0.55);
         }
 
         double salarioNeto = salarioBruto - impuestos;

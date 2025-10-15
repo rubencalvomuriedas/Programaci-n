@@ -57,8 +57,11 @@ public class Main {
         System.out.println("Billetes100: " + billete100);
         if (billete50 >0);
         System.out.println("Billetes50: " + billete50);
-        if
-
-
+        if (billete20 >0);
+        System.out.println("Billetes20: " + billete20);
+        if (billete10 >0);
+        System.out.println("Billetes10: " + billete10);
+        if (billete5 >0);
+        System.out.println("Billetes5: " + billete5);
     }
 }
