@@ -1,7 +1,9 @@
+import java.util.Scanner;
+
 public class E3 {
     public static void main(String[] args) {
     /* Ejercicio 3:Crea un programa que pida diez números reales por teclado, los almacene en un array,
-y luego lo recorra para averiguar el máximo y mínimo y mostrarlos por pantalla.
+    y luego lo recorra para averiguar el máximo y mínimo y mostrarlos por pantalla.
      */
         Scanner sc = new Scanner(System.in);
 
@@ -27,7 +29,7 @@ y luego lo recorra para averiguar el máximo y mínimo y mostrarlos por pantalla
         }
 
         System.out.println("\nEl numero maximo es:  " + maximo);
-        System.out.println("El numerEno minimo es:  " + minimo);
+        System.out.println("El numero minimo es:  " + minimo);
 
     }
 }
