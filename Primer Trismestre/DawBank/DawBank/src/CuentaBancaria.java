@@ -5,39 +5,68 @@ public class CuentaBancaria {
     private String IBAN;
     private double saldo;
     private Movimiento[] movimientos;
-    private int numMovimientos;
+    private int contadorMovimientos;
 
+    public static final int NUMERO_MAXIMO_DE_MOVIMIENTOS=100;
     public CuentaBancaria(String titular, String IBAN) {
         this.titular = titular;
         this.IBAN = IBAN;
         this.saldo =0;
-        this.movimientos = new Movimiento[100];
-        this.numMovimientos = 0;
+        movimientos = new Movimiento[NUMERO_MAXIMO_DE_MOVIMIENTOS];
+        contadorMovimientos = 0;
     }
     public String getIBAN() {return IBAN; }
     public String gettitular() {return titular; }
     public double getsaldo() {return saldo; }
-    private void registrarmovimiento(Movimiento m){
-        if (numMovimientos <100){
-            movimientos[numMovimientos++] = m;
+    public static boolean validarIBAN(String iban) {
+        if (iban.length() < 6) return false;
+        return Character.isLetter(iban.charAt(0)) &&
+                Character.isLetter(iban.charAt(1));
+    }
+
+    private void registrarMovimiento(Movimiento.TipoMovimiento tipo, double cantidad) {
+        if (contadorMovimientos < NUMERO_MAXIMO_DE_MOVIMIENTOS) {
+            movimientos[contadorMovimientos] = new Movimiento(contadorMovimientos + 1, tipo, cantidad);
+            contadorMovimientos++;
         }
     }
-    public void mostrarMovimientos(){
-        if (numMovimientos == 0);
-        System.out.println("No hay movimientos registrados");
-        return;
+
+    public boolean ingresar(double cantidad) {
+        if (cantidad <= 0) return false;
+        if (contadorMovimientos >= NUMERO_MAXIMO_DE_MOVIMIENTOS) return false;
+
+        saldo += cantidad;
+        registrarMovimiento(Movimiento.TipoMovimiento.INGRESO, cantidad);
+        return true;
     }
-    for (int i = 0; i < numMovimientos; i++){
-        movimientos[i].mostrarMovimientos();
+
+    public boolean retirar(double cantidad) {
+        if (cantidad <= 0) return false;
+        if (contadorMovimientos >= NUMERO_MAXIMO_DE_MOVIMIENTOS) return false;
+
+        if (saldo - cantidad < -50) return false; // límite de descubierto
+
+        saldo -= cantidad;
+        registrarMovimiento(Movimiento.TipoMovimiento.RETIRADA, cantidad);
+        return true;
     }
-    public void Ingresar(double cantidad, String fecha){
-        if (cantidad <= 0){
-            System.out.println("Cantidad Erronea");
+
+    public void mostrarDatos() {
+        System.out.println("IBAN: " + IBAN);
+        System.out.println("Titular: " + titular);
+        System.out.println("Saldo: " + saldo + "€");
+        if (saldo < 0) System.out.println("AVISO: Saldo negativo");
+    }
+
+    public void mostrarMovimientos() {
+        if (contadorMovimientos == 0) {
+            System.out.println("No hay movimientos.");
             return;
         }
-        saldo += cantidad;
-        registrarmovimiento(new Movimiento(fecha, "Ingreso", cantidad));
-        if (cantidad <=)
+
+        for (int i = 0; i < contadorMovimientos; i++) {
+            movimientos[i].mostrarMovimientos();
+        }
     }
 }
 

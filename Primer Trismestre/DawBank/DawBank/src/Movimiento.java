@@ -1,15 +1,18 @@
+import java.time.LocalDate;
+
 public class Movimiento {
 
-    private int contadorID;
+    public enum TipoMovimiento {
+        INGRESO, RETIRADA
+    }
     private int id;
-    private String fecha;
-    private String tipo;
-
+    private TipoMovimiento tipo;
+    private String fecha;;
     private double cantidad;
 
-    public Movimiento(String fecha, String tipo, double cantidad) {
-        this.id = contadorID++;
-        this.fecha = fecha;
+    public Movimiento(int id, TipoMovimiento tipo, double cantidad) {
+        this.id = id;
+        this.fecha = LocalDate.now().toString();
         this.tipo = tipo;
         this.cantidad = cantidad;
     }
@@ -18,7 +21,6 @@ public class Movimiento {
         System.out.println("ID" + id);
         System.out.println("Fecha" + fecha);
         System.out.println("Tipo" + tipo);
-        System.out.println("Cantidad" + cantidad);
-        System.out.println("--------------------------------------------------------");
+        System.out.println("Cantidad" + cantidad + "€");
     }
 }
