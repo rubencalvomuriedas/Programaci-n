@@ -11,14 +11,14 @@ public class Main {
             System.out.print("Introduzca IBAN: ");
             iban = sc.nextLine();
             if (!CuentaBancaria.validarIBAN(iban)) {
-                System.out.println("IBAN no válido (debe empezar por dos letras). Intente de nuevo.");
+                System.out.println("IBAN no válido (debe empezar por dos letras y tiene que tener 22 digitos). Intente de nuevo.");
             }
         } while (!CuentaBancaria.validarIBAN(iban));
 
         System.out.print("Introduzca titular: ");
         String titular = sc.nextLine();
 
-        CuentaBancaria cuenta = new CuentaBancaria(iban, titular);
+        CuentaBancaria cuenta = new CuentaBancaria(titular, iban);
 
         int opcion = 0;
         while (opcion != 8) {

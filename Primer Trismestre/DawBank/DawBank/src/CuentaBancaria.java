@@ -19,11 +19,18 @@ public class CuentaBancaria {
     public String gettitular() {return titular; }
     public double getsaldo() {return saldo; }
     public static boolean validarIBAN(String iban) {
-        if (iban.length() < 6) return false;
-        return Character.isLetter(iban.charAt(0)) &&
-                Character.isLetter(iban.charAt(1));
-    }
+        iban = iban.replace(" ","");
 
+        if (iban.length() != 24) return false;
+
+        if (!Character.isLetter(iban.charAt(0)) || !Character.isLetter(iban.charAt(1)))
+            return false;
+
+        for (int i = 2; i < 24; i++) {
+            if (!Character.isDigit(iban.charAt(i))) return false;
+        }
+        return true;
+    }
     private void registrarMovimiento(Movimiento.TipoMovimiento tipo, double cantidad) {
         if (contadorMovimientos < NUMERO_MAXIMO_DE_MOVIMIENTOS) {
             movimientos[contadorMovimientos] = new Movimiento(contadorMovimientos + 1, tipo, cantidad);
