@@ -58,7 +58,7 @@ public class CuentaBancaria {
     }
 
     public void mostrarDatos() {
-        System.out.println("IBAN: " + IBAN);
+        System.out.println("\nIBAN: " + IBAN);
         System.out.println("Titular: " + titular);
         System.out.println("Saldo: " + saldo + "€");
         if (saldo < 0) System.out.println("AVISO: Saldo negativo");

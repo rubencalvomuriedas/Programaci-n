@@ -18,9 +18,11 @@ public class Movimiento {
     }
 
     public void mostrarMovimientos(){
+        System.out.println("---------");
         System.out.println("ID" + id);
-        System.out.println("Fecha" + fecha);
-        System.out.println("Tipo" + tipo);
-        System.out.println("Cantidad" + cantidad + "€");
+        System.out.println("Fecha: " + fecha);
+        System.out.println("Tipo: " + tipo);
+        System.out.println("Cantidad: " + cantidad + "€");
+        System.out.println("---------");
     }
 }
