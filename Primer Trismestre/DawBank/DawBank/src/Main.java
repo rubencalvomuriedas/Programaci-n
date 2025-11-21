@@ -4,7 +4,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("Bienvenido a DawBank (mejorado nivel medio)");
+        System.out.println("Bienvenido a DawBank");
 
         String iban;
         do {
