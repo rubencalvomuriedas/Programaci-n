@@ -4,21 +4,21 @@ public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("Bienvenido a DawBank (mejorado nivel medio)");
+        System.out.println("Bienvenido a DawBank");
 
         String iban;
         do {
             System.out.print("Introduzca IBAN: ");
             iban = sc.nextLine();
             if (!CuentaBancaria.validarIBAN(iban)) {
-                System.out.println("IBAN no válido (debe empezar por dos letras). Intente de nuevo.");
+                System.out.println("IBAN no válido (debe empezar por dos letras y tiene que tener 22 digitos). Intente de nuevo.");
             }
         } while (!CuentaBancaria.validarIBAN(iban));
 
         System.out.print("Introduzca titular: ");
         String titular = sc.nextLine();
 
-        CuentaBancaria cuenta = new CuentaBancaria(iban, titular);
+        CuentaBancaria cuenta = new CuentaBancaria(titular, iban);
 
         int opcion = 0;
         while (opcion != 8) {
@@ -76,7 +76,7 @@ public class Main {
                     break;
 
                 case 8:
-                    System.out.println("Saliendo...");
+                    System.out.println("Saliendo...Gracias por utilizar DAWBANK");
                     break;
 
                 default:
