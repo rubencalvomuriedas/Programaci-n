@@ -41,17 +41,23 @@ public class CuentaBancaria {
         if (cantidad <= 0) return false;
         if (contadorMovimientos >= NUMERO_MAXIMO_DE_MOVIMIENTOS) return false;
 
+        if (cantidad >= 3000) {
+            System.out.println("*Aviso: Notificar a hacienda*");
+        }
         saldo += cantidad;
         registrarMovimiento(Movimiento.TipoMovimiento.INGRESO, cantidad);
         return true;
     }
 
+
     public boolean retirar(double cantidad) {
         if (cantidad <= 0) return false;
         if (contadorMovimientos >= NUMERO_MAXIMO_DE_MOVIMIENTOS) return false;
 
-        if (saldo - cantidad < -50) return false; // límite de descubierto
-
+        if (saldo - cantidad < -50) return false;
+        if (cantidad >= 3000) {
+            System.out.println("*Aviso: Notificar a hacienda*");
+        }
         saldo -= cantidad;
         registrarMovimiento(Movimiento.TipoMovimiento.RETIRADA, cantidad);
         return true;

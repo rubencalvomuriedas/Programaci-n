@@ -11,7 +11,7 @@ public class Main {
             System.out.print("Introduzca IBAN: ");
             iban = sc.nextLine();
             if (!CuentaBancaria.validarIBAN(iban)) {
-                System.out.println("IBAN no válido (debe empezar por dos letras y tiene que tener 22 digitos). Intente de nuevo.");
+                System.out.println("IBAN no válido (debe empezar por dos letras y tiene que tener 22 digitos, intentelo de nuevo.");
             }
         } while (!CuentaBancaria.validarIBAN(iban));
 
