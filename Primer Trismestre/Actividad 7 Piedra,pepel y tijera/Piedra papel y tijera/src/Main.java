@@ -1,139 +1,143 @@
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static <Explicarle> void main(String[] args) {
 
-        /*
-        Se debe realizar un proyecto para crear el juego de “Piedra, papel o tijera”, el programa debe
-        de seguir la siguiente estructura.
-         Explicarle al jugador cómo se juega.
-         Generar la jugada aleatoria del ordenador.
-         Pedir al jugador su jugada mediante una letra (P para piedra, L para papel, T para tijeras,
-        o S para salir terminando la partida):
-         Decidir quién ha ganado.
-        Una cosa es saber como se juega y otra es saberlo programar, los pasos a seguir serían:
-         Preparar el esqueleto y las constantes necesarias.
-         Mostrar instrucciones al usuario.
-         Generar la jugada del ordenador.
-         Recoger la jugada del usuario.
-         Interpretar la jugada del usuario.
-         Mostrar el resultado de la jugada.
-         Hacer el juego repetitivo.
-        Se admiten y se evaluarán mejoras sustanciales en el programa o en la complejidad del juego
-         */
         Scanner sc = new Scanner(System.in);
-        String opcion = "";
-        int victorias = 0;
-        int derrotas = 0;
-        int empates = 0;
-
-        String Papel;
-        String Piedra;
-        String Tijeras;
-        String opcionJugador = "";
-
-        String menu = "a. Jugar\n" +
-                "b. Victorias y derrotas\n" +
-                "c. Salir";
+        String option = "c";
 
 
         do {
-            sc =  new Scanner(System.in);
+            System.out.println("Elija Piedra, Papel o Tijeras para jugar, o salir para cerrar el juego.");
+            System.out.println("P.Piedra");
+            System.out.println("L.Papel");
+            System.out.println("T. Tijeras");
+            System.out.println("S. Salir");
+            option = sc.nextLine().toUpperCase();
+            int Pc = (int) Math.floor(Math.random() * 3);
+            int Win = 0;
+            int Lose = 0;
+            int Tie = 0;
+            System.out.println("Has ganado " + Win + " veces");
+            System.out.println("Has perdido " + Lose + " veces");
+            System.out.println("Has empatado " + Tie + " veces");
 
-            System.out.print("");
-            System.out.println(menu);
-            System.out.print("");
 
-            opcion = sc.nextLine();
 
-            switch (opcion.toLowerCase()) {
 
-                case "a":
-                    System.out.println("Eliga su opcion:  ");
-                    sc =  new Scanner(System.in);
-                    System.out.print("");
-                    System.out.println("\nP - Piedra\n" +
-                            "L - Papel\n" +
-                            "T - Tijeras\n" +
-                            "S - Salir");
-                    opcionJugador = sc.nextLine();
 
-                    switch (opcionJugador.toUpperCase()) {
-                        case "P":
-                            opcionJugador = "Piedra";
-                            break;
-                        case "L":
-                            opcionJugador = "Papel";
-                            break;
-                        case "T":
-                            opcionJugador = "Tijeras";
-                            break;
-                        case "S":
-                            System.out.println("Saliendo al menu principal");
-                            break;
+            switch (option) {
+                case "P":
+                    int optionP = 0;
+                    System.out.println("Tu: Piedra");
+                    if (Pc != optionP) {
+
+                        if (Pc == 1) {
+                            //Papel
+                            System.out.println("Pc: Papel");
+                            if (optionP == 0) {
+                                System.out.println("Has ganado!!");
+
+                                Win++;
+
+                            } else {
+                                System.out.println("Has Perdido ;_;");
+                            }
+                        }
+                        if (Pc == 2) {
+
+                            //Tijera
+                            System.out.println("Pc: Tijeras");
+                            if (optionP == 1) {
+                                System.out.println("Has ganado!!");
+
+                            } else {
+                                System.out.println("Has Perdido ;_;");
+                            }
+                        }
+
+                    } else {
+                        System.out.println("PC: Piedra");
+                        System.out.println("Es un empate!");
+
                     }
-
-                    int [] numeros = {1, 2 , 3};
-                    int randomNum = numeros[(int) (Math.random() * numeros.length)];
-                    String decisionIA;
-
-                    switch (randomNum) {
-                        case 1: decisionIA = "Piedra";
-                            break;
-                        case 2: decisionIA = "Papel";
-                            break;
-                        case 3: decisionIA = "Tijeras";
-                            break;
-                        default: decisionIA = "";
-                    }
-                    System.out.print("");
-                    System.out.println("Has elegido: " + opcionJugador);
-                    System.out.println("El ordenador saca: " + decisionIA);
-
-
-                    if (opcionJugador.equals("Piedra") && decisionIA.equals("Piedra")) {
-                        System.out.println("¡Empate!");
-                        empates ++;
-                    } else if (opcionJugador.equals("Piedra") && decisionIA.equals("Tijeras")) {
-                        System.out.println("¡Win!");
-                        victorias ++;
-                    } else if (opcionJugador.equals("Piedra") && decisionIA.equals("Papel")) {
-                        System.out.println("¡Lose!");
-                        derrotas++;
-                    } else if (opcionJugador.equals("Papel") && decisionIA.equals("Papel")) {
-                        System.out.println("¡Empate!");
-                        empates ++;
-                    } else if (opcionJugador.equals("Papel") && decisionIA.equals("Piedra")) {
-                        System.out.println("¡Win!");
-                        victorias ++;
-                    } else if (opcionJugador.equals("Papel") && decisionIA.equals("Tijeras")) {
-                        System.out.println("¡Lose!");
-                        derrotas ++;
-                    } else if (opcionJugador.equals("Tijeras") && decisionIA.equals("Tijeras")) {
-                        System.out.println("¡Empate!");
-                        empates ++;
-                    } else if (opcionJugador.equals("Tijeras") && decisionIA.equals("Papel")) {
-                        System.out.println("¡Win!");
-                        victorias ++;
-                    } else if (opcionJugador.equals("Tijeras") && decisionIA.equals("Piedra")) {
-                        System.out.println("¡Lose!");
-                        derrotas ++;
-                    }
-
                     break;
-                case "b":
-                    System.out.println("");
-                    System.out.println("Victorias: " + victorias);
-                    System.out.println("Derrotas: " + derrotas);
-                    System.out.println("Empates: " + empates);
+                case "L":
+                    int optionL = 1;
+                    System.out.println("Tu: Papel");
+                    if (Pc != optionL) {
+                        if (Pc == 0) {
 
+                            //piedra
+                            System.out.println("PC: Piedra");
+                            if (optionL == 2) {
+                                System.out.println("Has ganado!!");
+                            } else {
+                                System.out.println("Has Perdido ;_;");
+                            }
+                        }
+                        if (Pc == 2) {
+
+                            //Tijera
+                            System.out.println("Pc: Tijeras");
+                            if (optionL == 1) {
+                                System.out.println("Has ganado!!");
+
+                            } else {
+                                System.out.println("Has Perdido ;_;");
+                            }
+                        }
+
+                    } else {
+                        System.out.println("PC: Papel");
+                        System.out.println("Es un empate!");
+                    }
                     break;
-                case "c":
-                    System.out.println("\nTheEnd");
+                case "T":
+                    int optionT = 2;
+                    System.out.println("Tu: Tijera");
+
+                    if (Pc != optionT) {
+                        if (Pc == 0) {
+                            //piedra
+                            System.out.println("Pc: Piedra");
+                            if (optionT == 2) {
+                                System.out.println("Has ganado!!");
+                            } else {
+                                System.out.println("Has Perdido ;_;");
+                            }
+                        }
+                        if (Pc == 1) {
+                            //Papel
+                            System.out.println("Pc: Papel");
+                            if (optionT == 0) {
+                                System.out.println("Has ganado!!");
+
+                            } else {
+                                System.out.println("Has Perdido ;_;");
+                            }
+                        }
+
+                    } else {
+                        System.out.println("PC: Tijera");
+                        System.out.println("Es un empate!");
+                    }
+                    break;
+                case "S":
+                    System.out.println("El juego se cerrara.");
+
+
                     break;
                 default:
-                    System.out.println("\nOpcion erronea, vuelve a darle");
+                    System.out.println("Opcion no valida");
+                    System.out.println("Por favor elija una opcion correcta");
+
             }
-        } while(!opcion.equals("d"));{}
+
+
+        } while (!option.equals("S"));
+
+
     }
-}
+
+}CAMILO SE LA COME DOBLADA Y TAMBIEN LE GUSTA DAR SENTONES
