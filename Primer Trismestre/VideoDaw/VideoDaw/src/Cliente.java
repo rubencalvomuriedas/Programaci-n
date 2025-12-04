@@ -52,4 +52,14 @@ public class Cliente {
         }
         System.out.println();
     }
+    public void addPelicula(Pelicula p) {
+        peliculasAlquiladas.add(p);
+    }
+    public void removePelicula(Pelicula p) {
+        peliculasAlquiladas.remove(p);
+    }
+
+    public void setFechaBaja(LocalDate d) {
+        this.FechaBaja = d;
+    }
 }

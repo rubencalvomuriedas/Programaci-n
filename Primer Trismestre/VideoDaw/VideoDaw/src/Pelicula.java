@@ -34,6 +34,15 @@ public class Pelicula {
     public void setFechaBaja(LocalDate f) {
         FechaBaja = f;
     }
+    public void setIsAlquilada(boolean b) {
+        this.isAlquilada = b;
+    }
+    public boolean getIsAlquilada() {
+        return isAlquilada;
+    }
+    public String getTitulo() {
+        return Titulo;
+    }
     public void mostrarInformacionPelicula(){
         System.out.println("-----------");
         System.out.println("--- Película ---");
@@ -45,4 +54,5 @@ public class Pelicula {
         System.out.println("Alquilada: " + (isAlquilada ? "Sí" : "No"));
         System.out.println("-----------");
     }
+
 }

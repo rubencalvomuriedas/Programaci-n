@@ -2,6 +2,8 @@ import java.time.LocalDate;
 import java.util.Scanner;
 
 public class GestionVideoDaw {
+    public GestionVideoDaw(String cif, String dir) {
+    }
 
     public static void main(String[] args) {
 
@@ -33,7 +35,8 @@ public class GestionVideoDaw {
                     break;
 
                 case 2:
-                    if (videoclub == null) { System.out.println("Primero crea un videoclub."); break; }
+                    if (videoclub == null) { System.out.println("Primero crea un videoclub.");
+                    break; }
                     System.out.print("Código: ");
                     String cod = sc.nextLine();
                     System.out.print("Título: ");
@@ -84,5 +87,12 @@ public class GestionVideoDaw {
                 sc.close();
        
 
+    }
+
+    private void registrarPelicula(Pelicula pelicula) {
+    }
+    private void registrarCliente(Cliente cliente) {
+    }
+    private record videoclub(String cif, String dir) {
     }
 }
