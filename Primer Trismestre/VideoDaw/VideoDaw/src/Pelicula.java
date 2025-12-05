@@ -2,57 +2,76 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Pelicula {
-    private String Titulo;
-    private String Cod;
-    private Genero Genero;
-    private LocalDate FechaRegistro;
-    private LocalDate FechaBaja;
-    private LocalDateTime FechaAlquiler;
-    private boolean isAlquilada;
 
-    public Pelicula(String Titulo,String Cod,Genero Genero) {
-        this.Cod = Cod;
-        this.Titulo = Titulo;
-        this.Genero = Genero;
-        this.FechaRegistro = LocalDate.now();
-        this.isAlquilada = false;
+    private String cod;
+    private String titulo;
+    private Genero genero;
+    private LocalDate fechaRegistro;
+    private LocalDate fechaBaja;
+    private LocalDateTime fechaAlquiler;
+    private boolean alquilada;
+
+    public Pelicula(String cod, String titulo, Genero genero) {
+        this.cod = cod;
+        this.titulo = titulo;
+        this.genero = genero;
+        this.fechaRegistro = LocalDate.now();
+        this.alquilada = false;
     }
 
-    public String getCod() { return Cod; }
-    public boolean isAlquilada() {
-        return isAlquilada;
+    public String getCod() {
+        return cod; }
+    public void setCod(String cod) {
+        this.cod = cod;
     }
-    public void setAlquilada(boolean a) {
-        isAlquilada = a;
-    }
-    public void setFechaAlquiler(LocalDateTime f) {
-        LocalDateTime setfechaAlquiler = FechaAlquiler = f;
-    }
-    public LocalDateTime getFechaAlquiler() {
-        return FechaAlquiler;
-    }
-    public void setFechaBaja(LocalDate f) {
-        FechaBaja = f;
-    }
-    public void setIsAlquilada(boolean b) {
-        this.isAlquilada = b;
-    }
-    public boolean getIsAlquilada() {
-        return isAlquilada;
-    }
+
     public String getTitulo() {
-        return Titulo;
+        return titulo;
     }
-    public void mostrarInformacionPelicula(){
-        System.out.println("-----------");
-        System.out.println("--- Película ---");
-        System.out.println("Título: " + Titulo);
-        System.out.println("Código: " + Cod);
-        System.out.println("Género: " + Genero);
-        System.out.println("Fecha registro: " + FechaRegistro);
-        System.out.println("Fecha baja: " + FechaBaja);
-        System.out.println("Alquilada: " + (isAlquilada ? "Sí" : "No"));
-        System.out.println("-----------");
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
+    public Genero getGenero() {
+        return genero;
+    }
+    public void setGenero(Genero genero) {
+        this.genero = genero;
+    }
+
+    public boolean isAlquilada() {
+        return alquilada;
+    }
+    public void setAlquilada(boolean alquilada) {
+        this.alquilada = alquilada;
+    }
+
+    public LocalDate getFechaRegistro() {
+        return fechaRegistro;
+    }
+    public LocalDate getFechaBaja() {
+        return fechaBaja;
+    }
+    public void setFechaBaja(LocalDate fechaBaja) {
+        this.fechaBaja = fechaBaja;
+    }
+
+    public LocalDateTime getFechaAlquiler() {
+        return fechaAlquiler;
+    }
+    public void setFechaAlquiler(LocalDateTime fechaAlquiler) {
+        this.fechaAlquiler = fechaAlquiler;
+    }
+
+    public void mostrarInfoPelicula() {
+        System.out.println("=== PELÍCULA ===");
+        System.out.println("Código: " + cod);
+        System.out.println("Título: " + titulo);
+        System.out.println("Género: " + genero);
+        System.out.println("Registrada: " + fechaRegistro);
+        System.out.println("Baja: " + fechaBaja);
+        System.out.println("Alquilada: " + alquilada);
+        System.out.println("================");
+    }
 }
+
