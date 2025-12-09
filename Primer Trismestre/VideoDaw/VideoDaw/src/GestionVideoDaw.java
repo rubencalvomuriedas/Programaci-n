@@ -6,16 +6,16 @@ public class GestionVideoDaw {
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
-
         VideoDaw videoclub = null;
-        int contadorClientes = 1;
+
+        int opcion = 0;
         int contadorPeliculas = 1;
+        int contadorClientes = 1;
 
-        int opcion;
+        while (opcion != 8) {
 
-        do {
-            System.out.println("\n===== MENÚ =====");
-            System.out.println("1. Crear y registrar VideoClub");
+            System.out.println("\n--- MENÚ VIDEO DAW ---");
+            System.out.println("1. Crear videoclub");
             System.out.println("2. Registrar película");
             System.out.println("3. Registrar cliente");
             System.out.println("4. Alquilar película");
@@ -23,150 +23,188 @@ public class GestionVideoDaw {
             System.out.println("6. Dar de baja cliente");
             System.out.println("7. Dar de baja película");
             System.out.println("8. Salir");
-            System.out.print("Opción: ");
+            System.out.print("Elige opción: ");
 
-            opcion = sc.nextInt();
-            sc.nextLine();
+            opcion = Integer.parseInt(sc.nextLine());
 
             switch (opcion) {
 
                 case 1:
-                    System.out.print("CIF: ");
+                    System.out.print("Introduce CIF: ");
                     String cif = sc.nextLine();
-                    System.out.print("Dirección: ");
+                    while (!MiUtils.validarCIF(cif)) {
+                        System.out.print("CIF inválido. Intenta de nuevo: ");
+                        cif = sc.nextLine();
+                    }
+                    System.out.print("Introduce dirección: ");
                     String dir = sc.nextLine();
-
                     videoclub = new VideoDaw(cif, dir);
-                    System.out.println("Videoclub creado.");
+                    System.out.println("Videoclub creado correctamente.");
                     break;
 
                 case 2:
                     if (videoclub == null) {
-                        System.out.println("Crea primero el videoclub.");
+                        System.out.println("Primero debes crear un videoclub.");
                         break;
                     }
 
                     System.out.print("Título: ");
                     String titulo = sc.nextLine();
+                    System.out.print("Género (ACCION, COMEDIA...): ");
+                    Enums.Genero gen = Enums.Genero.valueOf(sc.nextLine().toUpperCase());
 
-                    System.out.println("Género:");
-                    for (Genero g : Genero.values()) System.out.println("- " + g);
+                    String codPel = MiUtils.generarCodigo("P", contadorPeliculas++);
+                    Pelicula nueva = new Pelicula(codPel, titulo, gen);
 
-                    Genero genero = Genero.valueOf(sc.nextLine().toUpperCase());
-                    String cod = MiUtils.generarCodigo("P", contadorPeliculas++);
-
-                    Pelicula p = new Pelicula(cod, titulo, genero);
-                    videoclub.registrarPelicula(p);
+                    videoclub.registrarPelicula(nueva);
+                    System.out.println("Película registrada con éxito.");
                     break;
 
                 case 3:
                     if (videoclub == null) {
-                        System.out.println("Crea primero el videoclub.");
+                        System.out.println("Crea un videoclub primero.");
                         break;
                     }
+
                     System.out.print("DNI: ");
                     String dni = sc.nextLine();
+                    while (!MiUtils.validarDNI(dni)) {
+                        System.out.print("DNI incorrecto. Introduce otro: ");
+                        dni = sc.nextLine();
+                    }
+
                     System.out.print("Nombre: ");
                     String nombre = sc.nextLine();
-                    System.out.print("Dirección cliente: ");
-                    String d = sc.nextLine();
 
-                    String socio = MiUtils.generarCodigo("S", contadorClientes++);
+                    System.out.print("Dirección: ");
+                    String dcli = sc.nextLine();
 
-                    Cliente c = new Cliente(dni, nombre, socio, d, LocalDate.of(2000, 1, 1));
-                    videoclub.registrarCliente(c);
+                    System.out.print("Fecha nacimiento (YYYY-MM-DD): ");
+                    LocalDate feNac = LocalDate.parse(sc.nextLine());
+                    while (!MiUtils.esMayorEdad(feNac)) {
+                        System.out.print("Debe ser mayor de edad. Nueva fecha: ");
+                        feNac = LocalDate.parse(sc.nextLine());
+                    }
+
+                    String numSoc = MiUtils.generarCodigo("S", contadorClientes++);
+                    Cliente cli = new Cliente(dni, nombre, numSoc, dcli, feNac);
+
+                    videoclub.registrarCliente(cli);
+                    System.out.println("Cliente registrado.");
                     break;
 
                 case 4:
-                    if (videoclub == null) {
-                        System.out.println("Crea primero el videoclub.");
-                        break;
-                    }
+                    if (videoclub == null) break;
 
-                    System.out.print("Código película: ");
-                    String cp = sc.nextLine();
+                    System.out.println("Selecciona cliente:");
+                    Cliente clienteA = seleccionarCliente(videoclub, sc);
+                    if (clienteA == null) break;
 
-                    Pelicula peliA = videoclub.getPeliculas()
-                            .stream()
-                            .filter(x -> x.getCod().equals(cp)).findFirst().orElse(null);
+                    System.out.println("Selecciona película:");
+                    Pelicula peliculaA = seleccionarPelicula(videoclub, sc);
+                    if (peliculaA == null) break;
 
-                    System.out.print("DNI cliente: ");
-                    String dc = sc.nextLine();
-
-                    Cliente cliA = videoclub.getClientes()
-                            .stream()
-                            .filter(x -> x.getDni().equals(dc)).findFirst().orElse(null);
-
-                    if (peliA != null && cliA != null)
-                        videoclub.alquilarPelicula(peliA, cliA);
-                    else
-                        System.out.println("Cliente/película no encontrados.");
+                    videoclub.alquilarPelicula(peliculaA, clienteA);
+                    System.out.println("Película alquilada.");
                     break;
 
                 case 5:
-                    if (videoclub == null) {
-                        System.out.println("Crea primero el videoclub.");
-                        break;
-                    }
+                    if (videoclub == null) break;
 
-                    System.out.print("Código película: ");
-                    String dp = sc.nextLine();
+                    System.out.println("Selecciona cliente:");
+                    Cliente clienteB = seleccionarCliente(videoclub, sc);
+                    if (clienteB == null) break;
 
-                    Pelicula peliD = videoclub.getPeliculas()
-                            .stream()
-                            .filter(x -> x.getCod().equals(dp)).findFirst().orElse(null);
+                    System.out.println("Selecciona película:");
+                    Pelicula peliculaB = seleccionarPelicula(videoclub, sc);
+                    if (peliculaB == null) break;
 
-                    System.out.print("DNI cliente: ");
-                    String dcli = sc.nextLine();
-
-                    Cliente cliD = videoclub.getClientes()
-                            .stream()
-                            .filter(x -> x.getDni().equals(dcli)).findFirst().orElse(null);
-
-                    if (peliD != null && cliD != null)
-                        videoclub.devolverPelicula(peliD, cliD);
-                    else
-                        System.out.println("Cliente/película no encontrados.");
+                    videoclub.devolverPelicula(peliculaB, clienteB);
+                    System.out.println("Película devuelta.");
                     break;
 
                 case 6:
-                    System.out.print("DNI cliente: ");
-                    String dniBC = sc.nextLine();
+                    if (videoclub == null) break;
 
-                    Cliente cliBC = videoclub.getClientes()
-                            .stream()
-                            .filter(x -> x.getDni().equals(dniBC)).findFirst().orElse(null);
+                    System.out.println("Selecciona cliente para dar de baja:");
+                    Cliente clienteC = seleccionarCliente(videoclub, sc);
+                    if (clienteC == null) break;
 
-                    if (cliBC != null)
-                        videoclub.darDeBajaCliente(cliBC);
-                    else
-                        System.out.println("Cliente no encontrado.");
+                    videoclub.darBajaCliente(clienteC);
+                    System.out.println("Cliente dado de baja.");
                     break;
 
                 case 7:
-                    System.out.print("Código película: ");
-                    String codBP = sc.nextLine();
+                    if (videoclub == null) break;
 
-                    Pelicula peliBP = videoclub.getPeliculas()
-                            .stream()
-                            .filter(x -> x.getCod().equals(codBP)).findFirst().orElse(null);
+                    System.out.println("Selecciona película para dar de baja:");
+                    Pelicula peliculaC = seleccionarPelicula(videoclub, sc);
+                    if (peliculaC == null) break;
 
-                    if (peliBP != null)
-                        videoclub.darDeBajaPelicula(peliBP);
-                    else
-                        System.out.println("Pelicula no encontrada.");
+                    videoclub.darBajaPelicula(peliculaC);
+                    System.out.println("Película dada de baja.");
                     break;
 
                 case 8:
-                    System.out.println("Saliendo...");
+                    System.out.println("Gracias por usar VideoDAW. ¡Hasta pronto!");
                     break;
 
                 default:
-                    System.out.println("Opción inválida.");
+                    System.out.println("Opción incorrecta.");
             }
-
-        } while (opcion != 8);
+        }
 
         sc.close();
+    }
+
+    public static Cliente seleccionarCliente(VideoDaw v, Scanner sc) {
+        Cliente[] lista = v.getClientes();
+
+        int num = 1;
+        for (Cliente c : lista) {
+            if (c != null) {
+                System.out.println(num + ". " + c.getNombre() + " (" + c.getDni() + ")");
+            }
+            num++;
+        }
+
+        System.out.print("Elige número: ");
+        int eleccion = Integer.parseInt(sc.nextLine());
+
+        if (eleccion < 1 || eleccion >= num) return null;
+
+        int pos = 0;
+        for (Cliente c : lista) {
+            if (c != null) {
+                if (eleccion == 1) return c;
+                eleccion--;
+            }
+        }
+        return null;
+    }
+
+    public static Pelicula seleccionarPelicula(VideoDaw v, Scanner sc) {
+        Pelicula[] lista = v.getPeliculas();
+
+        int num = 1;
+        for (Pelicula p : lista) {
+            if (p != null) {
+                System.out.println(num + ". " + p.getTitulo());
+            }
+            num++;
+        }
+
+        System.out.print("Elige número: ");
+        int eleccion = Integer.parseInt(sc.nextLine());
+
+        if (eleccion < 1 || eleccion >= num) return null;
+
+        for (Pelicula p : lista) {
+            if (p != null) {
+                if (eleccion == 1) return p;
+                eleccion--;
+            }
+        }
+        return null;
     }
 }

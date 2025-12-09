@@ -1,5 +1,4 @@
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 public class Cliente {
 
@@ -9,77 +8,65 @@ public class Cliente {
     private String direccion;
     private LocalDate fechaNacimiento;
     private LocalDate fechaBaja;
-    private ArrayList<Pelicula> peliculasAlquiladas;
+    private Pelicula[] peliculasAlquiladas;
 
     public Cliente(String dni, String nombre, String numSocio, String direccion, LocalDate fechaNacimiento) {
-
-        if (!MiUtils.validarDNI(dni)) {
-            System.out.println("AVISO: DNI no válido.");
-        }
-
         this.dni = dni;
         this.nombre = nombre;
         this.numSocio = numSocio;
         this.direccion = direccion;
         this.fechaNacimiento = fechaNacimiento;
-        this.peliculasAlquiladas = new ArrayList<>();
+        this.fechaBaja = null;
+        this.peliculasAlquiladas = new Pelicula[10];
     }
 
-    public String getDni() {
-        return dni;
-    }
-    public void setDni(String dni) {
-        this.dni = dni;
-    }
+    public String getDni() { return dni; }
+    public String getNombre() { return nombre; }
+    public String getNumSocio() { return numSocio; }
+    public LocalDate getFechaNacimiento() { return fechaNacimiento; }
+    public LocalDate getFechaBaja() { return fechaBaja; }
+    public Pelicula[] getPeliculasAlquiladas() { return peliculasAlquiladas; }
 
-    public String getNombre() {
-        return nombre;
-    }
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getNumSocio() {
-        return numSocio;
-    }
-    public void setNumSocio(String numSocio) {
-        this.numSocio = numSocio;
-    }
-
-    public LocalDate getFechaBaja() {
-        return fechaBaja;
-    }
-    public void setFechaBaja(LocalDate fechaBaja) {
-        this.fechaBaja = fechaBaja;
-    }
-
-    public ArrayList<Pelicula> getPeliculasAlquiladas() {
-        return peliculasAlquiladas;
-    }
-
-    public void addPelicula(Pelicula p) {
-        peliculasAlquiladas.add(p);
-    }
-
-    public void devolverPelicula(Pelicula p) {
-        peliculasAlquiladas.remove(p);
-    }
+    public void setFechaBaja(LocalDate fechaBaja) { this.fechaBaja = fechaBaja; }
 
     public void mostrarInfoCliente() {
-        System.out.println("=== CLIENTE ===");
         System.out.println("DNI: " + dni);
         System.out.println("Nombre: " + nombre);
-        System.out.println("Socio: " + numSocio);
+        System.out.println("Número socio: " + numSocio);
         System.out.println("Dirección: " + direccion);
         System.out.println("Fecha nacimiento: " + fechaNacimiento);
         System.out.println("Fecha baja: " + fechaBaja);
-        System.out.println("================");
+        System.out.println("-------------------------------");
     }
 
     public void mostrarPeliculasAlquiladas() {
         System.out.println("Películas alquiladas por " + nombre + ":");
         for (Pelicula p : peliculasAlquiladas) {
-            System.out.println("- " + p.getCod());
+            if (p != null) {
+                System.out.println("- " + p.getTitulo());
+            }
         }
+        System.out.println("-------------------------------");
     }
+
+    public boolean addPelicula(Pelicula p) {
+        for (int i = 0; i < peliculasAlquiladas.length; i++) {
+            if (peliculasAlquiladas[i] == null) {
+                peliculasAlquiladas[i] = p;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean removePelicula(Pelicula p) {
+        for (int i = 0; i < peliculasAlquiladas.length; i++) {
+            if (peliculasAlquiladas[i] != null && peliculasAlquiladas[i].equals(p)) {
+                peliculasAlquiladas[i] = null;
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
