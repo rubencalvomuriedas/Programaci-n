@@ -24,6 +24,19 @@ public class Agenda {
             return;
         }
 
+        System.out.println("Telefono: ");
+        String telefono = sc.nextLine();
+
+        if (!Contacto.validarTelefono(telefono)){
+            System.out.println("telefono Incorrecto. ");
+            return;
+        }
+
+        if (existeContacto(telefono)){
+            System.out.println("El contacto ya existe. ");
+            return;
+
+        }
         System.out.println("correo: ");
         String correo = sc.nextLine();
 
@@ -31,7 +44,6 @@ public class Agenda {
             System.out.println("Correo incorrecto. ");
         }
 
-        String telefono = null;
         Contacto c = new Contacto(nombre, telefono, correo);
         contactos.add(c);
         System.out.println("Contacto añadido correctamente. ");

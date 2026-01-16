@@ -4,14 +4,12 @@ public class Contacto {
     private String telefono;
     private String correo;
 
-    // Constructor
     public Contacto(String nombre, String telefono, String correo) {
         this.nombre = nombre;
         this.telefono = telefono;
         this.correo = correo;
     }
 
-    // Getters
     public String getNombre() {
         return nombre;
     }
@@ -24,13 +22,12 @@ public class Contacto {
         return correo;
     }
 
-    // Métodos de validación sencillos
     public static boolean validarNombre(String nombre) {
         return nombre.matches("[A-Z][a-zA-Z ]*");
     }
 
     public static boolean validarTelefono(String telefono) {
-        return telefono.matches("[0-999][0-9][0-9][0-9]");
+        return telefono.matches("\\d{9}");
     }
 
     public static boolean validarCorreo(String correo) {
