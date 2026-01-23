@@ -1,7 +1,7 @@
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class Ejercicio2 {
+public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
@@ -23,7 +23,5 @@ public class Ejercicio2 {
             System.out.println("Error: división entre cero");
             e.printStackTrace();
         }
-
-        sc.close();
     }
 }
