@@ -1,304 +1,458 @@
 import java.time.LocalDate;
 import java.time.Period;
-import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class GestionVideoDaw {
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
 
-        String menu = "\n1. Crear y registrar VideoClub en la franquicia.\n" +
-                "2. Registrar película en videoclub.\n" +
-                "3. Crear y registrar cliente en videoclub.\n" +
-                "4. Alquilar película.\n" +
-                "5. Devolver película.\n" +
-                "6. Dar de baja cliente.\n" +
-                "7. Dar de baja película.\n" +
-                "8. Salir.";
+            Scanner sc = new Scanner(System.in);
 
-        String opcion = "";
+            String menu = "\n1. Crear y registrar VideoDaw.\n" +
+                    "2. Registrar artículo en VideoDaw.\n" +
+                    "3. Crear y registrar cliente en VideoDaw.\n" +
+                    "4. Alquilar artículo.\n" +
+                    "5. Devolver artículo.\n" +
+                    "6. Dar de baja cliente.\n" +
+                    "7. Mostrar artículos.\n" +
+                    "8. Mostrar clientes.\n" +
+                    "9. Salir.";
 
-        VideoDaw nuevoUsuario = null;
-        Pelicula peliculon;
-        Cliente victima;
+            String opcion;
 
-        String cif = "";
-        String direccionEm = "";
+            VideoDaw videoClub = VideoDaw.cargarDatos();
 
+            System.out.println("Bienvenido a VideoDaw");
 
-        System.out.print("Bienvenido a Dawbank" +
-                " (Presione intro para continuar)");
+            do {
 
+                System.out.println(menu);
+                System.out.print("Seleccione una opción: ");
+                opcion = sc.nextLine();
 
+                switch (opcion) {
 
-        do {
-            sc = new Scanner(System.in);
+                    case "1":
 
-            System.out.print("");
-            System.out.println(menu);
-            System.out.print("");
+                        String cif = obtenerCIFValido();
 
-            opcion = sc.nextLine();
+                        System.out.println("Introduzca la dirección del videoclub:");
+                        String direccion = sc.nextLine();
 
-            switch (opcion) {
-                case "1":
-                    cif = obtenerCIFValido().toUpperCase();
+                        videoClub = new VideoDaw(cif, direccion);
 
-                    System.out.println("\nIngrese la dirección de la empresa: ");
-                    direccionEm = sc.nextLine();
+                        System.out.println("VideoClub creado correctamente");
 
-                    nuevoUsuario = new VideoDaw(direccionEm, cif);
+                        break;
 
-                    System.out.println(nuevoUsuario.mostrarInfoVideoDaw());
-                    break;
-                case "2":
-                    if (nuevoUsuario == null) {
-                        System.out.println("No existe el videoClub en la empresa");
-                        continue;
-                    }
-                    registrarPelicula(sc, nuevoUsuario);
-                    break;
+                    case "2":
 
+                        if (videoClub == null) {
+                            System.out.println("Primero debe crear el videoclub.");
+                            break;
+                        }
 
+                        System.out.println("\n¿Qué desea registrar?");
+                        System.out.println("1. Película");
+                        System.out.println("2. Videojuego");
 
-                case "3":
-                    if (nuevoUsuario == null) {
-                        System.out.println("No existe el videoClub en la empresa");
-                        continue;
-                    }
-                    crearRegistrarCliente(sc, nuevoUsuario);
-                    break;
+                        String tipo = sc.nextLine();
 
-                case "4":
-                    if (nuevoUsuario == null) {
-                        System.out.println("No existe el videoClub en la empresa");
-                        continue;
-                    }
-                    System.out.println("Ingrese el numero de socio:");
-                    String socio = sc.nextLine().toUpperCase();
+                        if (tipo.equals("1")) {
 
-                    System.out.println("Ingrese el codigo de pelicula:");
-                    String codPeli = sc.nextLine().toUpperCase();
+                            registrarPelicula(sc, videoClub);
 
-                    boolean alquilado = nuevoUsuario.alquilarPeicula(socio, codPeli);
+                        } else if (tipo.equals("2")) {
 
-                    if (alquilado) {
-                        System.out.println("¡Pelicula alquilada exitosamente!");
-                    } else {
-                        System.out.println("Error: No se pudo realizar el alquiler");
-                    }
+                            registrarVideojuego(sc, videoClub);
 
-                    break;
-                case "5":
-                    if (nuevoUsuario == null) {
-                        System.out.println("No existe el videoClub en la empresa");
-                        continue;
-                    }
-                    System.out.println("Ingrese el numero de socio:");
-                    socio = sc.nextLine().toUpperCase();
+                        } else {
 
-                    System.out.println("Ingrese el codigo de pelicula:");
-                    codPeli = sc.nextLine().toUpperCase();
+                            System.out.println("Opción inválida");
 
-                    boolean devuelto = nuevoUsuario.devolverPelicula(socio, codPeli);
+                        }
 
-                    if (devuelto) {
-                        System.out.println("¡Pelicula devuelta exitosamente!");
-                    } else {
-                        System.out.println("Error: No se pudo realizar el alquiler");
-                    }
+                        break;
 
-                    break;
-                case "6":
-                    if (nuevoUsuario == null) {
-                        System.out.println("No existe el videoClub en la empresa");
-                        continue;
-                    }
-                    System.out.println("Ingrese el número de socio (Ej: S-005):");
-                    String numSocio = sc.nextLine().toUpperCase();
+                    case "3":
 
-                    boolean darBajonCliente = nuevoUsuario.darBajaCliente(numSocio);
+                        if (videoClub == null) {
+                            System.out.println("Primero debe crear el videoclub.");
+                            break;
+                        }
 
-                    if (darBajonCliente) {
-                        System.out.println("Cliente dado de baja correctamente");
-                    } else {
-                        System.out.println("No se pudo dar de baja. El cliente no existe o ya esta dado de baja");
-                    }
-                    break;
-                case "7":
-                    if (nuevoUsuario == null) {
-                        System.out.println("No existe el videoClub en la empresa");
-                        continue;
-                    }
-                    System.out.println("Ingrese el codigo de la pelicula (Ej: P-007)");
-                    String cod = sc.nextLine().toUpperCase();
+                        crearRegistrarCliente(sc, videoClub);
 
-                    boolean darBajonPelicula = nuevoUsuario.darBajaPelicula(cod);
-                    if (darBajonPelicula) {
-                        System.out.println("Pelicula dado de baja correctamente");
-                    } else {
-                        System.out.println("No se pudo dar de baja. La pelicula no existe o ya esta dado de baja");
-                    }
-                    break;
-                case "8":
-                    System.out.println("\nAviso: Saliendo del sistema.");
-                    break;
-                case "9":
-                    nuevoUsuario.mostrarPeliculas();
-                    break;
-                case "10":
-                    nuevoUsuario.mostrarClientes();
-                    break;
-                case "11":
-                    System.out.println("Inserte el codigo de la pelicula:");
-                    cod = sc.nextLine().toUpperCase();
+                        break;
 
+                    case "4":
 
+                        if (videoClub == null) {
+                            System.out.println("Primero debe crear el videoclub.");
+                            break;
+                        }
 
+                        System.out.println("Introduzca número de socio:");
+                        String socio = sc.nextLine().toUpperCase();
 
-                default:
-                    System.out.print("\nOpción invalida. Por favor vuelva a intentarlo.");
-                    break;
-            }
+                        System.out.println("Introduzca código del artículo:");
+                        String cod = sc.nextLine().toUpperCase();
 
+                        videoClub.alquilar(cod, socio);
 
-        } while (!opcion.equals("8"));
+                        System.out.println("Alquiler realizado");
 
+                        break;
 
+                    case "5":
 
+                        if (videoClub == null) {
+                            System.out.println("Primero debe crear el videoclub.");
+                            break;
+                        }
 
-    }
+                        System.out.println("Introduzca número de socio:");
+                        socio = sc.nextLine().toUpperCase();
 
-    private static void registrarPelicula(Scanner sc, VideoDaw nuevoUsuario) {
-        System.out.println("Introduzca el titulo:");
-        String titulo = sc.nextLine();
+                        System.out.println("Introduzca código del artículo:");
+                        cod = sc.nextLine().toUpperCase();
 
-        Genero genero;
-        int gen = -1;
+                        try {
 
-        do {
-            System.out.println("Seleccione un género:");
-            for (Genero g : Genero.values()) {
-                System.out.println((g.ordinal() + 1) + ". " + g);
-            }
-            System.out.println("Opción: ");
+                            videoClub.devolver(cod, socio);
+                            System.out.println("Artículo devuelto correctamente");
 
-            String entrada = sc.nextLine();
+                        } catch (TiempoAlquilerExcedidoException e) {
 
+                            System.out.println(e.getMessage());
 
-            if (entrada.matches("\\d+")) {
-                gen = Integer.parseInt(entrada);
-            } else {
-                System.out.println("Error: Debe ingresar un número.");
-                continue;
-            }
+                        }
 
-            if (gen < 1 || gen > Genero.values().length) {
-                System.out.println("Opción fuera de rango. Intente nuevamente.");
-            }
+                        break;
 
-        } while (gen < 1 || gen > Genero.values().length);
+                    case "6":
 
-        genero = Genero.values()[gen - 1];
+                        if (videoClub == null) {
+                            System.out.println("Primero debe crear el videoclub.");
+                            break;
+                        }
 
-        Pelicula p = new Pelicula(titulo, genero);
-        nuevoUsuario.agregarPelicula(p);
-        System.out.println("Película agregada correctamente. El codigo de la pelicula es: "+ p.getCod());
-    }
+                        System.out.println("Introduzca número de socio:");
+                        socio = sc.nextLine().toUpperCase();
 
-    private static void crearRegistrarCliente(Scanner sc, VideoDaw nuevoUsuario) {
-        Cliente victima;
-        String dni = obtenerDNIValido().toUpperCase();
+                        Cliente c = videoClub.buscarCliente(socio);
 
-        System.out.println("Introduzca el nombre del cliente: ");
-        String nombre = sc.nextLine();
+                        if (c != null) {
 
-        System.out.println("Introduzca la dirección del cliente: ");
-        String direccion = sc.nextLine();
+                            videoClub.darBajaCliente(c);
+                            System.out.println("Cliente dado de baja");
 
+                        } else {
 
-        LocalDate fechaNacimiento;
+                            System.out.println("Cliente no encontrado");
 
-        while (true) {
-            fechaNacimiento = obtenerFechaValida();
+                        }
 
-            if (esMayorDeEdad(fechaNacimiento)) {
-                break;
-            } else {
-                System.out.println("Error: El cliente debe ser mayor de edad.");
-            }
+                        break;
+
+                    case "7":
+
+                        if (videoClub != null)
+                            videoClub.mostrarArticulosRegistrados();
+
+                        break;
+
+                    case "8":
+
+                        if (videoClub != null)
+                            videoClub.mostrarClientesRegistrados();
+
+                        break;
+
+                    case "9":
+
+                        if (videoClub != null) {
+                            videoClub.guardarDatos();
+                        }
+
+                        System.out.println("Saliendo del sistema");
+
+                        break;
+
+                    default:
+
+                        System.out.println("Opción inválida");
+
+                }
+
+            } while (!opcion.equals("9"));
+
         }
 
-        victima = new Cliente(dni, nombre, direccion, fechaNacimiento);
-        nuevoUsuario.agregarCliente(victima);
+        private static void registrarPelicula(Scanner sc, VideoDaw vd) {
 
-        System.out.println("Cliente agregada correctamente. Su numero de socio es: " + victima.getNumSocio());
-    }
+            String cod = vd.generarCodigoPelicula();
+            System.out.println("Código generado automáticamente: " + cod);
 
-    private static String obtenerCIFValido () {
-        Scanner sc = new Scanner(System.in);
-        String cif;
-        while (true) {
-            System.out.println("Ingrese un CIF valido para la empresa (Ejemplo: A1234567J):");
-            cif = sc.nextLine().toUpperCase();
-            if (validarCIF(cif)) {
-                System.out.println("\nCIF admitido correctamente.");
-                return cif;
+            System.out.println("Introduzca el título:");
+            String titulo = sc.nextLine();
+
+            GeneroPelicula genero;
+
+            int opcion;
+
+            do {
+
+                System.out.println("Seleccione género:");
+
+                for (GeneroPelicula g : GeneroPelicula.values()) {
+                    System.out.println((g.ordinal() + 1) + ". " + g);
+                }
+
+                opcion = Integer.parseInt(sc.nextLine());
+
+            } while (opcion < 1 || opcion > GeneroPelicula.values().length);
+
+            genero = GeneroPelicula.values()[opcion - 1];
+
+            Pelicula p = new Pelicula(cod, titulo, genero);
+
+            vd.registrarArticulo(p);
+
+            System.out.println("Película registrada correctamente");
+
+        }
+
+        private static void registrarVideojuego(Scanner sc, VideoDaw vd) {
+
+            String cod = vd.generarCodigoVideojuego();
+            System.out.println("Código generado automáticamente: " + cod);
+
+            System.out.println("Introduzca el título:");
+            String titulo = sc.nextLine();
+
+            GeneroVideojuego genero;
+
+            int opcion;
+
+            do {
+
+                System.out.println("Seleccione género:");
+
+                for (GeneroVideojuego g : GeneroVideojuego.values()) {
+                    System.out.println((g.ordinal() + 1) + ". " + g);
+                }
+
+                opcion = Integer.parseInt(sc.nextLine());
+
+            } while (opcion < 1 || opcion > GeneroVideojuego.values().length);
+
+            genero = GeneroVideojuego.values()[opcion - 1];
+
+            Videojuego v = new Videojuego(cod, titulo, genero);
+
+            vd.registrarArticulo(v);
+
+            System.out.println("Videojuego registrado correctamente");
+
+        }
+
+        private static void crearRegistrarCliente(Scanner sc, VideoDaw vd) {
+
+            String dni = obtenerDNIValido();
+
+            System.out.println("Introduzca nombre:");
+            String nombre = sc.nextLine();
+
+            System.out.println("Introduzca dirección:");
+            String direccion = sc.nextLine();
+
+            LocalDate fechaNacimiento;
+
+            while (true) {
+
+                fechaNacimiento = obtenerFechaValida();
+
+                if (esMayorDeEdad(fechaNacimiento))
+                    break;
+
+                System.out.println("El cliente debe ser mayor de edad");
 
             }
-            System.out.println("CIF invalido. Por favor vuelva a intentarlo.");
-        }
-    }
-    private static boolean validarCIF(String cif) {
-        return cif.matches("^[A-HJNP-S]\\d{7}[0-9A-J]$");
-    }
 
-    private static String obtenerDNIValido () {
-        Scanner sc = new Scanner(System.in);
-        String dni;
-        while (true) {
-            System.out.println("Ingrese el DNI del cliente (Ejemplo: 87654321M):");
-            dni = sc.nextLine().toUpperCase();
-            if (validarDNI(dni)) {
-                System.out.println("\nDNI admitido correctamente.");
-                return dni;
-            }
-            System.out.println("DNI invalido. Por favor vuelva a intentarlo.");
-        }
-    }
-    private static boolean validarDNI(String dni) {
-        return dni.matches("^\\d{8}[A-Za-z]$");
-    }
+            System.out.println("Introduzca número de socio (Ej: S-0001):");
+            String numSocio = sc.nextLine().toUpperCase();
 
-    private static LocalDate obtenerFechaValida() {
-        Scanner sc = new Scanner(System.in);
-        String fecha;
+            Cliente c = new Cliente(dni, nombre, direccion, fechaNacimiento, numSocio);
 
-        while (true) {
-            System.out.println("Ingrese la fecha de nacimiento (dd-MM-yyyy):");
-            fecha = sc.nextLine();
+            try {
 
-            if (validarFecha(fecha)) {
+                vd.registrarCliente(c);
 
-                String[] partes = fecha.split("-");
-                int dia = Integer.parseInt(partes[0]);
-                int mes = Integer.parseInt(partes[1]);
-                int año = Integer.parseInt(partes[2]);
+                System.out.println("Cliente registrado correctamente");
 
-                return LocalDate.of(año, mes, dia);
+            } catch (ClienteDuplicadoException e) {
+
+                System.out.println(e.getMessage());
+
             }
 
-            System.out.println("Fecha inválida. Por favor vuelva a intentarlo.");
         }
+
+        private static String obtenerCIFValido() {
+
+            Scanner sc = new Scanner(System.in);
+
+            String cif;
+
+            while (true) {
+
+                System.out.println("Introduzca CIF (Ej: A1234567J):");
+
+                cif = sc.nextLine().toUpperCase();
+
+                if (cif.matches("^[A-HJNP-S]\\d{7}[0-9A-J]$"))
+                    return cif;
+
+                System.out.println("CIF inválido");
+
+            }
+
+        }
+
+        private static String obtenerDNIValido() {
+
+            Scanner sc = new Scanner(System.in);
+
+            String dni;
+
+            while (true) {
+
+                System.out.println("Introduzca DNI (Ej: 12345678A):");
+
+                dni = sc.nextLine().toUpperCase();
+
+                if (dni.matches("^\\d{8}[A-Za-z]$"))
+                    return dni;
+
+                System.out.println("DNI inválido");
+
+            }
+
+        }
+
+        private static LocalDate obtenerFechaValida() {
+
+            Scanner sc = new Scanner(System.in);
+
+            while (true) {
+
+                System.out.println("Introduzca fecha de nacimiento (dd-MM-yyyy):");
+
+                String fecha = sc.nextLine();
+
+                if (fecha.matches("^\\d{2}-\\d{2}-\\d{4}$")) {
+
+                    String[] p = fecha.split("-");
+
+                    int dia = Integer.parseInt(p[0]);
+                    int mes = Integer.parseInt(p[1]);
+                    int año = Integer.parseInt(p[2]);
+
+                    return LocalDate.of(año, mes, dia);
+
+                }
+
+                System.out.println("Fecha inválida");
+
+            }
+
+        }
+
+        private static boolean esMayorDeEdad(LocalDate fechaNacimiento) {
+
+            return Period.between(fechaNacimiento, LocalDate.now()).getYears() >= 18;
+
+        }
+
     }
 
+        private static String obtenerCIFValido() {
 
-    private static boolean validarFecha(String fecha) {
-        return fecha.matches("^\\d{2}-\\d{2}-\\d{4}$");
-    }
-    private static boolean esMayorDeEdad(LocalDate fechaNacimiento) {
-        int edad = Period.between(fechaNacimiento, LocalDate.now()).getYears();
-        return edad >= 18;
+            Scanner sc = new Scanner(System.in);
+
+            String cif;
+
+            while (true) {
+
+                System.out.println("Introduzca CIF (Ej: A1234567J):");
+
+                cif = sc.nextLine().toUpperCase();
+
+                if (cif.matches("^[A-HJNP-S]\\d{7}[0-9A-J]$"))
+                    return cif;
+
+                System.out.println("CIF inválido");
+
+            }
+
+        }
+
+        private static String obtenerDNIValido() {
+
+            Scanner sc = new Scanner(System.in);
+
+            String dni;
+
+            while (true) {
+
+                System.out.println("Introduzca DNI (Ej: 12345678A):");
+
+                dni = sc.nextLine().toUpperCase();
+
+                if (dni.matches("^\\d{8}[A-Za-z]$"))
+                    return dni;
+
+                System.out.println("DNI inválido");
+
+            }
+
+        }
+
+        private static LocalDate obtenerFechaValida() {
+
+            Scanner sc = new Scanner(System.in);
+
+            while (true) {
+
+                System.out.println("Introduzca fecha de nacimiento (dd-MM-yyyy):");
+
+                String fecha = sc.nextLine();
+
+                if (fecha.matches("^\\d{2}-\\d{2}-\\d{4}$")) {
+
+                    String[] p = fecha.split("-");
+
+                    int dia = Integer.parseInt(p[0]);
+                    int mes = Integer.parseInt(p[1]);
+                    int año = Integer.parseInt(p[2]);
+
+                    return LocalDate.of(año, mes, dia);
+
+                }
+
+                System.out.println("Fecha inválida");
+
+            }
+
+        }
+
+        private static boolean esMayorDeEdad(LocalDate fechaNacimiento) {
+
+            return Period.between(fechaNacimiento, LocalDate.now()).getYears() >= 18;
+
+        }
     }
 }
+
+

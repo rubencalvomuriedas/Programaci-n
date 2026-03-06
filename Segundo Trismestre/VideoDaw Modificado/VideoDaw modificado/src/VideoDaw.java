@@ -1,213 +1,205 @@
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.io.*;
+import java.util.ArrayList;
 
-public class VideoDaw {
+public class VideoDaw implements Serializable {
 
     private String cif;
-    private String direccionEm;
-    private String fechaAlta;
-    private Pelicula [] peliculasRegistradas;
-    private Cliente [] clientesRegistrados  ;
+    private String direccion;
 
-    private int contadorPeliculas = 0;
-    private int contadorClientes = 0;
+    private ArrayList<Articulo> articulos;
+    private ArrayList<Cliente> clientes;
 
-    private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+    private int contadorPeliculas = 1;
+    private int contadorVideojuegos = 1;
 
-    public VideoDaw(String cif, String direccionEm) {
+    private static final String FICHERO = "videodaw.dat";
+
+    public VideoDaw(String cif, String direccion) {
+
         this.cif = cif;
-        this.direccionEm = direccionEm;
-        this.fechaAlta = LocalDateTime.now().format(dtf);
-        this.peliculasRegistradas = new Pelicula[100];
-        this.clientesRegistrados = new Cliente[100];
+        this.direccion = direccion;
+
+        articulos = new ArrayList<>();
+        clientes = new ArrayList<>();
+
     }
 
-    public String getCif() {
-        return cif;
-    }
-    public void setCif(String cif) {
-        this.cif = cif;
-    }
-    public String getDireccionEm() {
-        return direccionEm;
-    }
-    public void setDireccionEm(String direccionEm) {
-        this.direccionEm = direccionEm;
-    }
-    public String getFechaAlta() {
-        return fechaAlta;
+    public String generarCodigoPelicula() {
+
+        String cod = String.format("P-%04d", contadorPeliculas);
+        contadorPeliculas++;
+
+        return cod;
+
     }
 
-    public void agregarPelicula(Pelicula p) {
-        if (contadorPeliculas < peliculasRegistradas.length) {
-            peliculasRegistradas[contadorPeliculas] = p;
-            contadorPeliculas++;
-        }  else {
-            System.out.println("No se pueden registrar más películas (límite alcanzado).");
-        }
+    public String generarCodigoVideojuego() {
+
+        String cod = String.format("V-%04d", contadorVideojuegos);
+        contadorVideojuegos++;
+
+        return cod;
+
     }
-    public void mostrarPeliculas() {
-        if (contadorPeliculas == 0) {
-            System.out.println("No hay películas registradas.");
-        } else {
-            for (int i = 0; i < contadorPeliculas; i++) {
-                peliculasRegistradas[i].mostrarInfoPelicula();
+
+    public void registrarArticulo(Articulo a) {
+
+        articulos.add(a);
+
+    }
+
+    public void registrarCliente(Cliente c) throws ClienteDuplicadoException {
+
+        for (Cliente cli : clientes) {
+
+            if (cli.getNumSocio().equals(c.getNumSocio())) {
+
+                throw new ClienteDuplicadoException("Cliente duplicado");
+
             }
-        }
-    }
 
-    public void agregarCliente(Cliente c) {
-        if (contadorClientes < clientesRegistrados.length) {
-            clientesRegistrados[contadorClientes] = c;
-            contadorClientes++;
-        }  else {
-            System.out.println("No se pueden registrar más clientes (límite alcanzado).");
         }
-    }
 
-    public void mostrarClientes() {
-        if (contadorClientes == 0) {
-            System.out.println("No hay clientes registradas.");
-        } else {
-            for (int i = 0; i < contadorClientes; i++) {
-                clientesRegistrados[i].mostrarInfoCliente();
-            }
-        }
+        clientes.add(c);
+
     }
 
     public Cliente buscarCliente(String numSocio) {
-        for (int i = 0; i < contadorClientes; i++) {
-            if (clientesRegistrados[i].getNumSocio().equals(numSocio)) {
-                return clientesRegistrados[i];
+
+        for (Cliente c : clientes) {
+
+            if (c.getNumSocio().equals(numSocio)) {
+
+                return c;
+
             }
+
         }
+
         return null;
-    }
-    public boolean darBajaCliente(String numSocio) {
-        Cliente c = buscarCliente(numSocio);
 
-        if (c == null) {
-            return false;
-        }
-
-        if (c.getFechaBaja() != null) {
-            return false;
-        }
-
-        c.setFechaBaja(LocalDate.now().toString());
-        return true;
     }
 
-    public Pelicula buscarPelicula(String cod) {
-        for (int i = 0; i < contadorPeliculas; i++) {
-            if (peliculasRegistradas[i].getCod().equals(cod)) {
-                return peliculasRegistradas[i];
+    public Articulo buscarArticulo(String cod) {
+
+        for (Articulo a : articulos) {
+
+            if (a.getCod().equals(cod)) {
+
+                return a;
+
             }
+
         }
+
         return null;
-    }
-    public boolean darBajaPelicula(String cod) {
-        Pelicula p = buscarPelicula(cod);
-        if (p == null) {
-            return false;
-        }
-        if (p.getFechaBaja() != null) {
-            return false;
-        }
-
-        p.setFechaBaja(LocalDate.now().toString());
-        return true;
-    }
-
-    public boolean alquilarPeicula (String numSocio, String cod) {
-        Cliente c = buscarCliente(numSocio);
-        Pelicula p = buscarPelicula(cod);
-
-        // Verificar existencia
-        if (c == null) {
-            System.out.println("Error: Cliente no encontrado");
-            return false;
-        }
-        if (p == null) {
-            System.out.println("Error: Pelicula no encontrada");
-            return false;
-        }
-
-        // Verificar si esta dado de baja
-        if (c.getFechaBaja() != null) {
-            System.out.println("Error: El cliente esta dado de baja y no puede alquilar");
-            return false;
-        }
-        if (p.getFechaBaja() != null) {
-            System.out.println("Error: La pelicula esta dada de baja");
-            return false;
-        }
-
-
-
-        if (p.isAlquilada()) {
-            System.out.println("Error: La pelicula ya esta alquilada");
-            return false;
-        }
-
-
-        p.setAlquilada(true);
-        c.setPeliculasAlquiladas(c.getPeliculasAlquiladas() + 1);
-
-        System.out.println("Alquiler realizado correctamente");
-        return true;
 
     }
 
-    public boolean devolverPelicula(String nunSocio, String cod) {
-        Cliente c = buscarCliente(nunSocio);
-        Pelicula p = buscarPelicula(cod);
+    public void alquilar(String cod, String numSocio) {
 
-        if (c == null) {
-            System.out.println("Error: Cliente no encontrado");
-            return false;
-        }
-        if (p == null) {
-            System.out.println("Error: Pelicula no encontrada");
-            return false;
+        Articulo a = buscarArticulo(cod);
+
+        if (a instanceof Pelicula) {
+
+            Pelicula p = (Pelicula) a;
+            p.setAlquilada(true);
+
         }
 
-        if (c.getFechaBaja() != null) {
-            System.out.println("Error: El cliente esta dado de baja y no puede devolver");
-            return false;
-        }
-        if (p.getFechaBaja() != null) {
-            System.out.println("Error: La pelicula esta dada de baja");
-            return false;
+        else if (a instanceof Videojuego) {
+
+            Videojuego v = (Videojuego) a;
+            v.alquilar();
+
         }
 
-        if (!p.isAlquilada()) {
-            System.out.println("Error: La pelicula no esta alquilada");
-            return false;
-        }
-
-        if (c.getPeliculasAlquiladas() <= 0) {
-            System.out.println("Error: El cliente no tiene peliculas para devolver");
-            return false;
-        }
-
-        p.setAlquilada(false);
-        c.setPeliculasAlquiladas(c.getPeliculasAlquiladas() - 1);
-
-        System.out.println("La pelicula fue devuelta correctamente");
-        return true;
     }
 
+    public void devolver(String cod, String numSocio) throws TiempoAlquilerExcedidoException {
 
-    public String mostrarInfoVideoDaw() {
-        StringBuilder sb = new StringBuilder("\nVideoDaw:\n");
-        sb.append("CIF: " + this.cif + "\n");
-        sb.append("Direccion: " + this.direccionEm + "\n");
-        sb.append("Fecha de alta: " + this.fechaAlta + "\n");
+        Articulo a = buscarArticulo(cod);
 
-        return sb.toString();
+        if (a instanceof Pelicula) {
+
+            Pelicula p = (Pelicula) a;
+            p.setAlquilada(false);
+
+        }
+
+        else if (a instanceof Videojuego) {
+
+            Videojuego v = (Videojuego) a;
+            v.devolver();
+
+        }
+
     }
 
+    public void darBajaCliente(Cliente c) {
+
+        clientes.remove(c);
+
+    }
+
+    public void mostrarArticulosRegistrados() {
+
+        for (Articulo a : articulos) {
+
+            System.out.println(a);
+
+        }
+
+    }
+
+    public void mostrarClientesRegistrados() {
+
+        for (Cliente c : clientes) {
+
+            System.out.println(c);
+
+        }
+
+    }
+
+    public void guardarDatos() {
+
+        try {
+
+            ObjectOutputStream oos =
+                    new ObjectOutputStream(new FileOutputStream(FICHERO));
+
+            oos.writeObject(this);
+
+            oos.close();
+
+        } catch (IOException e) {
+
+            System.out.println("Error guardando datos");
+
+        }
+
+    }
+
+    public static VideoDaw cargarDatos() {
+
+        try {
+
+            ObjectInputStream ois =
+                    new ObjectInputStream(new FileInputStream(FICHERO));
+
+            VideoDaw v = (VideoDaw) ois.readObject();
+
+            ois.close();
+
+            return v;
+
+        } catch (Exception e) {
+
+            return null;
+
+        }
+
+    }
 
 }
