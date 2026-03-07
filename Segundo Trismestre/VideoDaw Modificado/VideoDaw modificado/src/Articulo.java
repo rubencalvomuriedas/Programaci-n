@@ -50,4 +50,13 @@ public abstract class Articulo implements Serializable {
         this.fechaBaja = fechaBaja;
     }
 
+    @Override
+    public String toString() {
+        return "Articulo{" +
+                "cod='" + cod + '\'' +
+                ", titulo='" + titulo + '\'' +
+                ", fechaRegistro=" + fechaRegistro.format(date) +
+                (fechaBaja != null ? ", fechaBaja=" + fechaBaja.format(date1) : "") +
+                '}';
+    }
 }
