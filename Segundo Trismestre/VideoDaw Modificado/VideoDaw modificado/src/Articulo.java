@@ -4,13 +4,14 @@ import java.io.Serializable;
 
 public abstract class Articulo implements Serializable {
 
+    private static final long serialVersionUID = 8333962502373795050L;
     private String cod;
     private String titulo;
     private LocalDate fechaRegistro;
     private LocalDate fechaBaja;
 
-    private DateTimeFormatter date = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    private DateTimeFormatter date1 = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+    private static final DateTimeFormatter date = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private static final DateTimeFormatter date1 = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
     public Articulo(String cod, String titulo) {
         this.cod = cod;

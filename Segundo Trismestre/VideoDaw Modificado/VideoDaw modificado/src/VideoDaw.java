@@ -3,6 +3,7 @@ import java.util.ArrayList;
 
 public class VideoDaw implements Serializable {
 
+    private static final long serialVersionUID = -8680616747626015308L;
     private String cif;
     private String direccion;
 
@@ -162,44 +163,5 @@ public class VideoDaw implements Serializable {
 
     }
 
-    public void guardarDatos() {
-
-        try {
-
-            ObjectOutputStream oos =
-                    new ObjectOutputStream(new FileOutputStream(FICHERO));
-
-            oos.writeObject(this);
-
-            oos.close();
-
-        } catch (IOException e) {
-
-            System.out.println("Error guardando datos");
-
-        }
-
-    }
-
-    public static VideoDaw cargarDatos() {
-
-        try {
-
-            ObjectInputStream ois =
-                    new ObjectInputStream(new FileInputStream(FICHERO));
-
-            VideoDaw v = (VideoDaw) ois.readObject();
-
-            ois.close();
-
-            return v;
-
-        } catch (Exception e) {
-
-            return null;
-
-        }
-
-    }
 
 }

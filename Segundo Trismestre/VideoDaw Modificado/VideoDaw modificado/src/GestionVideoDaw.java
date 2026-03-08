@@ -18,7 +18,7 @@ public class GestionVideoDaw {
 
         String opcion;
 
-        VideoDaw videoClub = VideoDaw.cargarDatos();
+        VideoDaw videoClub = MyUtils.cargar();
 
         System.out.println("Bienvenido a VideoDaw");
 
@@ -171,7 +171,7 @@ public class GestionVideoDaw {
                 case "9":
 
                     if (videoClub != null) {
-                        videoClub.guardarDatos();
+                        MyUtils.guardar(videoClub);
                     }
 
                     System.out.println("Saliendo del sistema");
