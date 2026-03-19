@@ -6,7 +6,7 @@ public class Gestion {
 
     public void mostrarTodos() throws Exception {
 
-        Connection con = ConexionBD.conectar();
+        Connection con = ConexionBD.getConnection();
         Statement st = con.createStatement();
 
         ResultSet rs = st.executeQuery("SELECT * FROM producto");
@@ -22,7 +22,7 @@ public class Gestion {
 
     public void buscarPorReferencia(String ref) throws Exception {
 
-        Connection con = ConexionBD.conectar();
+        Connection con = ConexionBD.getConnection();
 
         PreparedStatement ps = con.prepareStatement(
                 "SELECT * FROM producto WHERE referencia=?");
@@ -43,7 +43,7 @@ public class Gestion {
 
     public void buscarPorTipo(int tipo) throws Exception {
 
-        Connection con = ConexionBD.conectar();
+        Connection con = ConexionBD.getConnection();
 
         PreparedStatement ps = con.prepareStatement(
                 "SELECT * FROM producto WHERE tipo=?");
@@ -61,7 +61,7 @@ public class Gestion {
 
     public void buscarPorCantidad(int cantidad) throws Exception {
 
-        Connection con = ConexionBD.conectar();
+        Connection con = ConexionBD.getConnection();
 
         PreparedStatement ps = con.prepareStatement(
                 "SELECT * FROM producto WHERE cantidad>=?");
@@ -79,11 +79,10 @@ public class Gestion {
 
     public void insertar(Producto p) throws Exception {
 
-        Connection con = ConexionBD.conectar();
-
+        Connection con = ConexionBD.getConnection();
 
         PreparedStatement check = con.prepareStatement(
-                "SELECT * FROM producto WHERE referencia=?");
+                "SELECT 1 FROM producto WHERE referencia=?");
 
         check.setString(1, p.getReferencia());
 
@@ -98,13 +97,13 @@ public class Gestion {
 
         ps.setString(1, p.getReferencia());
         ps.setString(2, p.getNombre());
-        ps.setString(3, p.getNombre());
+        ps.setString(3, p.getDescripcion());
         ps.setInt(4, p.getTipo());
         ps.setInt(5, p.getCantidad());
         ps.setDouble(6, p.getPrecio());
         ps.setInt(7, p.getDescuento());
         ps.setInt(8, p.getIva());
-        ps.setBoolean(9, p.isAplicarDto());
+        ps.setBoolean(9, p.isAplicar_dto());
 
         ps.executeUpdate();
 
@@ -113,7 +112,7 @@ public class Gestion {
 
     public void eliminar(String ref) throws Exception {
 
-        Connection con = ConexionBD.conectar();
+        Connection con = ConexionBD.getConnection();
 
         PreparedStatement ps = con.prepareStatement(
                 "DELETE FROM producto WHERE referencia=?");
@@ -127,20 +126,48 @@ public class Gestion {
         con.close();
     }
 
-    public void actualizar(String ref, int cantidad, double precio) throws Exception {
+    public void actualizar(String ref, String descripcion, int cantidad,
+                           double precio, int descuento, boolean aplicarDto) throws Exception {
 
-        Connection con = ConexionBD.conectar();
+        Connection con = ConexionBD.getConnection();
 
         PreparedStatement ps = con.prepareStatement(
-                "UPDATE producto SET cantidad=?, precio=? WHERE referencia=?");
+                "UPDATE producto SET descripcion=?, cantidad=?, precio=?, descuento=?, aplicarDto=? WHERE referencia=?");
 
-        ps.setInt(1, cantidad);
-        ps.setDouble(2, precio);
-        ps.setString(3, ref);
+        ps.setString(1, descripcion);
+        ps.setInt(2, cantidad);
+        ps.setDouble(3, precio);
+        ps.setInt(4, descuento);
+        ps.setBoolean(5, aplicarDto);
+        ps.setString(6, ref);
 
         if (ps.executeUpdate() == 0) {
-            throw new Exception("No actualizado");
+            throw new Exception("No existe producto para actualizar");
         }
+
+        con.close();
+    }
+    public void insertarTipo(String nombre) throws Exception {
+
+        Connection con = ConexionBD.getConnection();
+
+        PreparedStatement check = con.prepareStatement(
+                "SELECT 1 FROM tipo WHERE nombre=?");
+
+        check.setString(1, nombre);
+
+        ResultSet rs = check.executeQuery();
+
+        if (rs.next()) {
+            throw new Exception("El tipo ya existe");
+        }
+
+        PreparedStatement ps = con.prepareStatement(
+                "INSERT INTO tipo (nombre) VALUES (?)");
+
+        ps.setString(1, nombre);
+
+        ps.executeUpdate();
 
         con.close();
     }

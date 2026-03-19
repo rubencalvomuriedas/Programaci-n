@@ -8,9 +8,6 @@ public class Inventario {
 
         Scanner sc = new Scanner(System.in);
 
-        ConexionBD.getConnection();
-
-
         Gestion dao = new Gestion();
 
         int opcion = 0;
@@ -23,8 +20,8 @@ public class Inventario {
             System.out.println("5. Insertar producto");
             System.out.println("6. Eliminar producto");
             System.out.println("7. Actualizar producto");
+            System.out.println("8. Insertar tipo de producto");
             System.out.println("9. Salir");
-
 
             if (sc.hasNextInt()) {
                 opcion = sc.nextInt();
@@ -39,23 +36,21 @@ public class Inventario {
                 switch (opcion) {
 
                     case 1:
-                        //dao.mostrarTodos();
+                        dao.mostrarTodos();
                         break;
 
                     case 2:
                         System.out.print("Referencia: ");
-                        String refBus = sc.nextLine();
-                        //dao.buscarPorReferencia(refBus);
+                        dao.buscarPorReferencia(sc.nextLine());
                         break;
 
                     case 3:
                         System.out.print("Tipo: ");
                         if (sc.hasNextInt()) {
-                            int tipo = sc.nextInt();
+                            dao.buscarPorTipo(sc.nextInt());
                             sc.nextLine();
-//                            dao.buscarPorTipo(tipo);
                         } else {
-                            System.out.println("Tipo debe ser número");
+                            System.out.println("Tipo inválido");
                             sc.nextLine();
                         }
                         break;
@@ -63,16 +58,19 @@ public class Inventario {
                     case 4:
                         System.out.print("Cantidad mínima: ");
                         if (sc.hasNextInt()) {
-                            int cantidad = sc.nextInt();
+                            dao.buscarPorCantidad(sc.nextInt());
                             sc.nextLine();
-                            //dao.buscarPorCantidad(cantidad);
                         } else {
-                            System.out.println("Cantidad debe ser número");
+                            System.out.println("Cantidad inválida");
                             sc.nextLine();
                         }
                         break;
 
                     case 5:
+                        System.out.print("ID: ");
+                        int id = sc.nextInt();
+                        sc.nextLine();
+
                         System.out.print("Referencia: ");
                         String ref = sc.nextLine();
 
@@ -82,53 +80,35 @@ public class Inventario {
                         System.out.print("Descripción: ");
                         String desc = sc.nextLine();
 
-                        System.out.print("Tipo (ID): ");
-                        int tipoInsert;
-                        if (sc.hasNextInt()) {
-                            tipoInsert = sc.nextInt();
-                        } else {
-                            System.out.println("Tipo inválido");
-                            sc.nextLine();
-                            break;
-                        }
+                        System.out.print("Tipo: ");
+                        int tipo = sc.nextInt();
 
                         System.out.print("Cantidad: ");
-                        int cant;
-                        if (sc.hasNextInt()) {
-                            cant = sc.nextInt();
-                        } else {
-                            System.out.println("Cantidad inválida");
-                            sc.nextLine();
-                            break;
-                        }
+                        int cant = sc.nextInt();
 
                         System.out.print("Precio: ");
-                        double precio;
-                        if (sc.hasNextDouble()) {
-                            precio = sc.nextDouble();
-                        } else {
-                            System.out.println("Precio inválido");
-                            sc.nextLine();
-                            break;
-                        }
+                        double precio = sc.nextDouble();
 
                         sc.nextLine();
 
-                        Producto p = new Producto(ref, nom, desc,
-                                tipoInsert, cant, precio, 0, 21, true);
+                        Producto p = new Producto(id, ref, nom, desc,
+                                tipo, cant, precio, 0, 21, true);
 
-//                        dao.insertar(p);
+                        dao.insertar(p);
                         System.out.println("Producto insertado");
                         break;
 
                     case 6:
                         System.out.print("Referencia: ");
-//                        dao.eliminar(sc.nextLine());
+                        dao.eliminar(sc.nextLine());
                         break;
 
                     case 7:
                         System.out.print("Referencia: ");
                         String r = sc.nextLine();
+
+                        System.out.print("Nueva descripción: ");
+                        String nuevaDesc = sc.nextLine();
 
                         System.out.print("Cantidad: ");
                         if (!sc.hasNextInt()) {
@@ -146,10 +126,36 @@ public class Inventario {
                         }
                         double pr = sc.nextDouble();
 
+                        System.out.print("Descuento: ");
+                        if (!sc.hasNextInt()) {
+                            System.out.println("Descuento inválido");
+                            sc.nextLine();
+                            break;
+                        }
+                        int dto = sc.nextInt();
+
+                        System.out.print("Aplicar descuento (true/false): ");
+                        if (!sc.hasNextBoolean()) {
+                            System.out.println("Valor inválido");
+                            sc.nextLine();
+                            break;
+                        }
+                        boolean aplicar = sc.nextBoolean();
+
                         sc.nextLine();
 
-                        //dao.actualizar(r, c, pr);
+                        dao.actualizar(r, nuevaDesc, c, pr, dto, aplicar);
+
                         System.out.println("Producto actualizado");
+                        break;
+
+                    case 8:
+                        System.out.print("Nombre del tipo: ");
+                        String nombreTipo = sc.nextLine();
+
+                        dao.insertarTipo(nombreTipo);
+
+                        System.out.println("Tipo insertado correctamente");
                         break;
 
                     case 9:
