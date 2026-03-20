@@ -7,7 +7,6 @@ public class Inventario {
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
-
         Gestion dao = new Gestion();
 
         int opcion = 0;
@@ -45,14 +44,9 @@ public class Inventario {
                         break;
 
                     case 3:
-                        System.out.print("Tipo: ");
-                        if (sc.hasNextInt()) {
-                            dao.buscarPorTipo(sc.nextInt());
-                            sc.nextLine();
-                        } else {
-                            System.out.println("Tipo inválido");
-                            sc.nextLine();
-                        }
+                        System.out.print("Tipo (Fruta, Verdura, Carne, Pescado, Lacteos, Panaderia, Bebidas): ");
+                        String tipo = sc.nextLine();
+                        dao.buscarPorTipo(tipo);
                         break;
 
                     case 4:
@@ -67,10 +61,6 @@ public class Inventario {
                         break;
 
                     case 5:
-                        System.out.print("ID: ");
-                        int id = sc.nextInt();
-                        sc.nextLine();
-
                         System.out.print("Referencia: ");
                         String ref = sc.nextLine();
 
@@ -80,8 +70,8 @@ public class Inventario {
                         System.out.print("Descripción: ");
                         String desc = sc.nextLine();
 
-                        System.out.print("Tipo: ");
-                        int tipo = sc.nextInt();
+                        System.out.print("Tipo (Fruta, Verdura, Carne, Pescado, Lacteos, Panaderia, Bebidas): ");
+                        String tipoProd = sc.nextLine();
 
                         System.out.print("Cantidad: ");
                         int cant = sc.nextInt();
@@ -89,10 +79,22 @@ public class Inventario {
                         System.out.print("Precio: ");
                         double precio = sc.nextDouble();
 
+                        System.out.print("Descuento: ");
+                        int dto = sc.nextInt();
+
+                        System.out.print("IVA: ");
+                        int iva = sc.nextInt();
+
+                        System.out.print("Aplicar descuento (true/false): ");
+                        boolean aplicar = sc.nextBoolean();
+
                         sc.nextLine();
 
-                        Producto p = new Producto(id, ref, nom, desc,
-                                tipo, cant, precio, 0, 21, true);
+                        Producto p = new Producto(
+                                0, ref, nom, desc,
+                                tipoProd,
+                                cant, precio, dto, iva, aplicar
+                        );
 
                         dao.insertar(p);
                         System.out.println("Producto insertado");
@@ -132,7 +134,7 @@ public class Inventario {
                             sc.nextLine();
                             break;
                         }
-                        int dto = sc.nextInt();
+                        int dto2 = sc.nextInt();
 
                         System.out.print("Aplicar descuento (true/false): ");
                         if (!sc.hasNextBoolean()) {
@@ -140,11 +142,11 @@ public class Inventario {
                             sc.nextLine();
                             break;
                         }
-                        boolean aplicar = sc.nextBoolean();
+                        boolean aplicar2 = sc.nextBoolean();
 
                         sc.nextLine();
 
-                        dao.actualizar(r, nuevaDesc, c, pr, dto, aplicar);
+                        dao.actualizar(r, nuevaDesc, c, pr, dto2, aplicar2);
 
                         System.out.println("Producto actualizado");
                         break;

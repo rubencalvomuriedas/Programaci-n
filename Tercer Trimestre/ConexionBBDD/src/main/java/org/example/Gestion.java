@@ -11,11 +11,29 @@ public class Gestion {
 
         ResultSet rs = st.executeQuery("SELECT * FROM producto");
 
+        System.out.println("---------------------------------------------------------------------------------------------");
+        System.out.println("| REF  | NOMBRE       | DESCRIPCIÓN       | TIPO       | CANT | PRECIO | DTO | IVA | DTO |");
+        System.out.println("---------------------------------------------------------------------------------------------");
+
         while (rs.next()) {
-            System.out.println(rs.getString("referencia") + " - " +
-                    rs.getString("nombre") + " - Cantidad: " +
-                    rs.getInt("cantidad"));
+
+            Producto p = new Producto(
+                    rs.getInt("id"),
+                    rs.getString("referencia"),
+                    rs.getString("nombre"),
+                    rs.getString("descripcion"),
+                    rs.getString("tipo"), // 🔥 CAMBIO CLAVE
+                    rs.getInt("cantidad"),
+                    rs.getDouble("precio"),
+                    rs.getInt("descuento"),
+                    rs.getInt("iva"),
+                    rs.getBoolean("aplicarDto")
+            );
+
+            System.out.println(p);
         }
+
+        System.out.println("---------------------------------------------------------------------------------------------");
 
         con.close();
     }
@@ -32,8 +50,7 @@ public class Gestion {
         ResultSet rs = ps.executeQuery();
 
         if (rs.next()) {
-            System.out.println("Producto encontrado: " +
-                    rs.getString("nombre"));
+            System.out.println("Producto encontrado: " + rs.getString("nombre"));
         } else {
             throw new Exception("No existe producto");
         }
@@ -41,14 +58,15 @@ public class Gestion {
         con.close();
     }
 
-    public void buscarPorTipo(int tipo) throws Exception {
+    // 🔥 CAMBIO IMPORTANTE → ahora String
+    public void buscarPorTipo(String tipo) throws Exception {
 
         Connection con = ConexionBD.getConnection();
 
         PreparedStatement ps = con.prepareStatement(
                 "SELECT * FROM producto WHERE tipo=?");
 
-        ps.setInt(1, tipo);
+        ps.setString(1, tipo);
 
         ResultSet rs = ps.executeQuery();
 
@@ -98,7 +116,7 @@ public class Gestion {
         ps.setString(1, p.getReferencia());
         ps.setString(2, p.getNombre());
         ps.setString(3, p.getDescripcion());
-        ps.setInt(4, p.getTipo());
+        ps.setString(4, p.getTipo()); // 🔥 ya es String
         ps.setInt(5, p.getCantidad());
         ps.setDouble(6, p.getPrecio());
         ps.setInt(7, p.getDescuento());
@@ -147,6 +165,7 @@ public class Gestion {
 
         con.close();
     }
+
     public void insertarTipo(String nombre) throws Exception {
 
         Connection con = ConexionBD.getConnection();
