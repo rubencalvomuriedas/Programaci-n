@@ -22,14 +22,14 @@ public class Inventario {
             System.out.println("8. Insertar tipo de producto");
             System.out.println("9. Salir");
 
-            if (sc.hasNextInt()) {
-                opcion = sc.nextInt();
-                sc.nextLine();
-            } else {
+            if (!sc.hasNextInt()) {
                 System.out.println("Debes introducir un número");
                 sc.nextLine();
                 continue;
             }
+
+            opcion = sc.nextInt();
+            sc.nextLine();
 
             try {
                 switch (opcion) {
@@ -45,19 +45,18 @@ public class Inventario {
 
                     case 3:
                         System.out.print("Tipo (Fruta, Verdura, Carne, Pescado, Lacteos, Panaderia, Bebidas): ");
-                        String tipo = sc.nextLine();
-                        dao.buscarPorTipo(tipo);
+                        dao.buscarPorTipo(sc.nextLine());
                         break;
 
                     case 4:
-                        System.out.print("Cantidad mínima: ");
-                        if (sc.hasNextInt()) {
-                            dao.buscarPorCantidad(sc.nextInt());
-                            sc.nextLine();
-                        } else {
+                        System.out.print("Cantidad: ");
+                        if (!sc.hasNextInt()) {
                             System.out.println("Cantidad inválida");
                             sc.nextLine();
+                            break;
                         }
+                        dao.buscarPorCantidad(sc.nextInt());
+                        sc.nextLine();
                         break;
 
                     case 5:
@@ -70,39 +69,63 @@ public class Inventario {
                         System.out.print("Descripción: ");
                         String desc = sc.nextLine();
 
-                        System.out.print("Tipo (Fruta, Verdura, Carne, Pescado, Lacteos, Panaderia, Bebidas): ");
-                        String tipoProd = sc.nextLine();
+                        System.out.print("Tipo: ");
+                        String tipo = sc.nextLine();
 
                         System.out.print("Cantidad: ");
+                        if (!sc.hasNextInt()) {
+                            System.out.println("Cantidad inválida");
+                            sc.nextLine();
+                            break;
+                        }
                         int cant = sc.nextInt();
 
                         System.out.print("Precio: ");
+                        if (!sc.hasNextDouble()) {
+                            System.out.println("Precio inválido");
+                            sc.nextLine();
+                            break;
+                        }
                         double precio = sc.nextDouble();
 
                         System.out.print("Descuento: ");
+                        if (!sc.hasNextInt()) {
+                            System.out.println("Descuento inválido");
+                            sc.nextLine();
+                            break;
+                        }
                         int dto = sc.nextInt();
 
                         System.out.print("IVA: ");
+                        if (!sc.hasNextInt()) {
+                            System.out.println("IVA inválido");
+                            sc.nextLine();
+                            break;
+                        }
                         int iva = sc.nextInt();
 
                         System.out.print("Aplicar descuento (true/false): ");
+                        if (!sc.hasNextBoolean()) {
+                            System.out.println("Valor inválido");
+                            sc.nextLine();
+                            break;
+                        }
                         boolean aplicar = sc.nextBoolean();
-
                         sc.nextLine();
 
                         Producto p = new Producto(
                                 0, ref, nom, desc,
-                                tipoProd,
-                                cant, precio, dto, iva, aplicar
+                                tipo, cant, precio, dto, iva, aplicar
                         );
 
                         dao.insertar(p);
-                        System.out.println("Producto insertado");
+                        System.out.println("Producto insertado correctamente");
                         break;
 
                     case 6:
                         System.out.print("Referencia: ");
                         dao.eliminar(sc.nextLine());
+                        System.out.println("Producto eliminado");
                         break;
 
                     case 7:
@@ -143,21 +166,16 @@ public class Inventario {
                             break;
                         }
                         boolean aplicar2 = sc.nextBoolean();
-
                         sc.nextLine();
 
                         dao.actualizar(r, nuevaDesc, c, pr, dto2, aplicar2);
-
                         System.out.println("Producto actualizado");
                         break;
 
                     case 8:
                         System.out.print("Nombre del tipo: ");
-                        String nombreTipo = sc.nextLine();
-
-                        dao.insertarTipo(nombreTipo);
-
-                        System.out.println("Tipo insertado correctamente");
+                        dao.insertarTipo(sc.nextLine());
+                        System.out.println("Tipo insertado");
                         break;
 
                     case 9:
@@ -169,7 +187,7 @@ public class Inventario {
                 }
 
             } catch (Exception e) {
-                System.out.println("Error: " + e.getMessage());
+                e.printStackTrace();
             }
 
         } while (opcion != 9);

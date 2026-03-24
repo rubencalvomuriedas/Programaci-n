@@ -13,10 +13,14 @@ public class Configuracion {
                     .getClassLoader()
                     .getResourceAsStream("application.dat");
 
+            if (is == null) {
+                throw new RuntimeException("No se encontró application.dat");
+            }
+
             props.load(is);
 
         } catch (Exception e) {
-            System.out.println("Error cargando configuración");
+            System.out.println("Error cargando configuración: " + e.getMessage());
         }
     }
 

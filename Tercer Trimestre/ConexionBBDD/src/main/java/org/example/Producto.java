@@ -11,11 +11,11 @@ public class Producto {
     private double precio;
     private int descuento;
     private int iva;
-    private boolean aplicar_dto;
+    private boolean aplicarDto;
 
     public Producto(int id, String referencia, String nombre, String descripcion,
                     String tipo, int cantidad, double precio,
-                    int descuento, int iva, boolean aplicar_dto) {
+                    int descuento, int iva, boolean aplicarDto) {
 
         this.id = id;
         this.referencia = referencia;
@@ -26,7 +26,7 @@ public class Producto {
         this.precio = precio;
         this.descuento = descuento;
         this.iva = iva;
-        this.aplicar_dto = aplicar_dto;
+        this.aplicarDto = aplicarDto;
     }
 
     public String getReferencia() { return referencia; }
@@ -37,21 +37,16 @@ public class Producto {
     public double getPrecio() { return precio; }
     public int getDescuento() { return descuento; }
     public int getIva() { return iva; }
-    public boolean isAplicar_dto() { return aplicar_dto; }
+
+    public boolean isAplicarDto() { return aplicarDto; }
 
     @Override
     public String toString() {
         return String.format(
                 "| %-4s | %-12s | %-18s | %-10s | %3d | %5.2f€ | %2d%% | %2d%% | %-3s |",
-                referencia,
-                nombre,
-                descripcion,
-                tipo,
-                cantidad,
-                precio,
-                descuento,
-                iva,
-                (aplicar_dto ? "SÍ" : "NO")
+                referencia, nombre, descripcion, tipo,
+                cantidad, precio, descuento, iva,
+                (aplicarDto ? "SÍ" : "NO")
         );
     }
 }

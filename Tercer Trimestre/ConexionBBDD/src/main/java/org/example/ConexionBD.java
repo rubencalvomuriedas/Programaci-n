@@ -21,4 +21,4 @@ public class ConexionBD {
 
         return DriverManager.getConnection(url, user, pass);
     }
-}
+} 
