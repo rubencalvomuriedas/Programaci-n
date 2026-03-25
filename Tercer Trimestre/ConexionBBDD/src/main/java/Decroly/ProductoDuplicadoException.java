@@ -1,4 +1,4 @@
-package org.example;
+package Decroly;
 
 public class ProductoDuplicadoException extends Exception {
 

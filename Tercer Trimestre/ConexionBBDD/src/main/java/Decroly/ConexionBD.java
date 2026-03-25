@@ -1,4 +1,4 @@
-package org.example;
+package Decroly;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

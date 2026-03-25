@@ -1,4 +1,4 @@
-package org.example;
+package Decroly;
 
 import java.util.Scanner;
 
@@ -22,6 +22,7 @@ public class Inventario {
             System.out.println("8. Insertar tipo de producto");
             System.out.println("9. Salir");
 
+            System.out.println("Introduce el numero que desea: ");
             if (!sc.hasNextInt()) {
                 System.out.println("Debes introducir un número");
                 sc.nextLine();
@@ -44,7 +45,7 @@ public class Inventario {
                         break;
 
                     case 3:
-                        System.out.print("Tipo (Fruta, Verdura, Carne, Pescado, Lacteos, Panaderia, Bebidas): ");
+                        System.out.print("Tipo (Fruta, Verdura, Carne, Pescado, Lácteos, Panadería, Bebidas): ");
                         dao.buscarPorTipo(sc.nextLine());
                         break;
 
@@ -70,7 +71,14 @@ public class Inventario {
                         String desc = sc.nextLine();
 
                         System.out.print("Tipo: ");
-                        String tipo = sc.nextLine();
+                        String nombreTipo = sc.nextLine();
+
+                        int tipo = dao.obtenerIdTipoPublico(nombreTipo);
+
+                        if (tipo == -1) {
+                            System.out.println("El tipo de producto no existe");
+                            break;
+                        }
 
                         System.out.print("Cantidad: ");
                         if (!sc.hasNextInt()) {
