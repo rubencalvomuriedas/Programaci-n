@@ -44,23 +44,29 @@ public class Gestion {
 
     public void mostrarTodos() throws Exception {
 
-        String sql = "SELECT p.*, t.nombre AS nombreTipo " +
+        String sql = "SELECT p.id, p.referencia AS ref, p.nombre, p.descripcion, " +
+                "t.nombre AS nombreTipo, p.cantidad, p.precio, p.descuento, p.iva, p.Dto " +
                 "FROM producto p " +
-                "JOIN tipo t ON p.tipo = t.id";
+                "JOIN tipo t ON p.tipo = t.id " +
+                "ORDER BY p.id";
 
         try (Connection con = ConexionBD.getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
-            System.out.println("---------------------------------------------------------------------------------------------------------------");
-            System.out.printf("| %-2s | %-10s | %-12s | %-18s | %-10s | %-4s | %-6s | %-3s | %-3s | %-10s |\n",
-                    "ID", "REFERENCIA", "NOMBRE", "DESCRIPCIÓN", "TIPO", "CANT", "PRECIO", "DTO", "IVA", "DTO APLIC");
-            System.out.println("---------------------------------------------------------------------------------------------------------------");
+            System.out.println("--------------------------------------------------------------------------------------------------");
+            System.out.printf("| %-2s | %-4s | %-12s | %-18s | %-9s | %-4s | %-7s | %-4s | %-4s | %-3s |\n",
+                    "ID", "REF", "NOMBRE", "DESCRIPCIÓN", "TIPO", "CANT", "PRECIO", "DESC", "IVA", "DTO");
+            System.out.println("--------------------------------------------------------------------------------------------------");
+
+            boolean hayDatos = false;
 
             while (rs.next()) {
-                System.out.printf("| %-2d | %-10s | %-12s | %-18s | %-10s | %-4d | %-6.2f | %-3d | %-3d | %-10s |\n",
+                hayDatos = true;
+
+                System.out.printf("| %-2d | %-4s | %-12s | %-18s | %-9s | %-4d | %-7.2f | %-4d | %-4d | %-3s |\n",
                         rs.getInt("id"),
-                        rs.getString("referencia"),
+                        rs.getString("ref"),
                         rs.getString("nombre"),
                         rs.getString("descripcion"),
                         rs.getString("nombreTipo"),
@@ -68,19 +74,20 @@ public class Gestion {
                         rs.getDouble("precio"),
                         rs.getInt("descuento"),
                         rs.getInt("iva"),
-                        rs.getBoolean("aplicarDto") ? "SÍ" : "NO");
+                        rs.getBoolean("Dto") ? "SÍ" : "NO");
             }
 
-            System.out.println("---------------------------------------------------------------------------------------------------------------");
+            if (!hayDatos) {
+                System.out.println("No hay productos en el inventario.");
+            }
+
+            System.out.println("--------------------------------------------------------------------------------------------------");
         }
     }
 
     public void buscarPorReferencia(String ref) throws Exception {
 
-        String sql = "SELECT p.*, t.nombre AS nombreTipo " +
-                "FROM producto p " +
-                "JOIN tipo t ON p.tipo = t.id " +
-                "WHERE p.referencia=?";
+        String sql = "SELECT * FROM producto WHERE referencia=?";
 
         try (Connection con = ConexionBD.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -89,16 +96,11 @@ public class Gestion {
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    System.out.println("ID: " + rs.getInt("id"));
-                    System.out.println("Referencia: " + rs.getString("referencia"));
-                    System.out.println("Nombre: " + rs.getString("nombre"));
-                    System.out.println("Descripción: " + rs.getString("descripcion"));
-                    System.out.println("Tipo: " + rs.getString("nombreTipo"));
-                    System.out.println("Cantidad: " + rs.getInt("cantidad"));
-                    System.out.println("Precio: " + rs.getDouble("precio"));
-                    System.out.println("Descuento: " + rs.getInt("descuento"));
-                    System.out.println("IVA: " + rs.getInt("iva"));
-                    System.out.println("Aplicar descuento: " + rs.getBoolean("aplicarDto"));
+                    System.out.println(
+                            rs.getString("referencia") + " | " +
+                                    rs.getString("nombre") + " | " +
+                                    rs.getString("descripcion")
+                    );
                 } else {
                     throw new ProductoNoEncontradoException("No existe producto");
                 }
@@ -115,10 +117,7 @@ public class Gestion {
             return;
         }
 
-        String sql = "SELECT p.*, t.nombre AS nombreTipo " +
-                "FROM producto p " +
-                "JOIN tipo t ON p.tipo = t.id " +
-                "WHERE p.tipo=?";
+        String sql = "SELECT nombre FROM producto WHERE tipo=? ORDER BY id";
 
         try (Connection con = ConexionBD.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -129,17 +128,7 @@ public class Gestion {
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    System.out.println("ID: " + rs.getInt("id"));
-                    System.out.println("Referencia: " + rs.getString("referencia"));
-                    System.out.println("Nombre: " + rs.getString("nombre"));
-                    System.out.println("Descripción: " + rs.getString("descripcion"));
-                    System.out.println("Tipo: " + rs.getString("nombreTipo"));
-                    System.out.println("Cantidad: " + rs.getInt("cantidad"));
-                    System.out.println("Precio: " + rs.getDouble("precio"));
-                    System.out.println("Descuento: " + rs.getInt("descuento"));
-                    System.out.println("IVA: " + rs.getInt("iva"));
-                    System.out.println("Aplicar descuento: " + rs.getBoolean("aplicarDto"));
-                    System.out.println("-----------------------------------");
+                    System.out.println(rs.getString("nombre"));
                     encontrado = true;
                 }
             }
@@ -152,10 +141,7 @@ public class Gestion {
 
     public void buscarPorCantidad(int cantidad) throws Exception {
 
-        String sql = "SELECT p.*, t.nombre AS nombreTipo " +
-                "FROM producto p " +
-                "JOIN tipo t ON p.tipo = t.id " +
-                "WHERE p.cantidad=?";
+        String sql = "SELECT nombre FROM producto WHERE cantidad=? ORDER BY id";
 
         try (Connection con = ConexionBD.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -166,17 +152,7 @@ public class Gestion {
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    System.out.println("ID: " + rs.getInt("id"));
-                    System.out.println("Referencia: " + rs.getString("referencia"));
-                    System.out.println("Nombre: " + rs.getString("nombre"));
-                    System.out.println("Descripción: " + rs.getString("descripcion"));
-                    System.out.println("Tipo: " + rs.getString("nombreTipo"));
-                    System.out.println("Cantidad: " + rs.getInt("cantidad"));
-                    System.out.println("Precio: " + rs.getDouble("precio"));
-                    System.out.println("Descuento: " + rs.getInt("descuento"));
-                    System.out.println("IVA: " + rs.getInt("iva"));
-                    System.out.println("Aplicar descuento: " + rs.getBoolean("aplicarDto"));
-                    System.out.println("-----------------------------------");
+                    System.out.println(rs.getString("nombre"));
                     encontrado = true;
                 }
             }
@@ -193,7 +169,7 @@ public class Gestion {
             throw new ProductoDuplicadoException("La referencia ya existe");
         }
 
-        String sql = "INSERT INTO producto (referencia, nombre, descripcion, tipo, cantidad, precio, descuento, iva, aplicarDto) VALUES (?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO producto (referencia, nombre, descripcion, tipo, cantidad, precio, descuento, iva, Dto) VALUES (?,?,?,?,?,?,?,?,?)";
 
         try (Connection con = ConexionBD.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -230,7 +206,7 @@ public class Gestion {
     public void actualizar(String ref, String descripcion, int cantidad,
                            double precio, int descuento, boolean aplicarDto) throws Exception {
 
-        String sql = "UPDATE producto SET descripcion=?, cantidad=?, precio=?, descuento=?, aplicarDto=? WHERE referencia=?";
+        String sql = "UPDATE producto SET descripcion=?, cantidad=?, precio=?, descuento=?, Dto=? WHERE referencia=?";
 
         try (Connection con = ConexionBD.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {

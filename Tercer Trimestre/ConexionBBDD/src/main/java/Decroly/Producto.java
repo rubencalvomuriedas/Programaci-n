@@ -3,7 +3,7 @@ package Decroly;
 public class Producto {
 
     private int id;
-    private String referencia;
+    private String ref;
     private String nombre;
     private String descripcion;
     private int tipo;
@@ -13,11 +13,11 @@ public class Producto {
     private int iva;
     private boolean aplicarDto;
 
-    public Producto(int id, String referencia, String nombre, String descripcion,
+    public Producto(int id, String ref, String nombre, String descripcion,
                     int tipo, int cantidad, double precio, int descuento,
                     int iva, boolean aplicarDto) {
         this.id = id;
-        this.referencia = referencia;
+        this.ref = ref;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.tipo = tipo;
@@ -33,7 +33,7 @@ public class Producto {
     }
 
     public String getReferencia() {
-        return referencia;
+        return ref;
     }
 
     public String getNombre() {
@@ -71,8 +71,8 @@ public class Producto {
     @Override
     public String toString() {
         return String.format(
-                "| %-4s | %-12s | %-18s | %-3d | %3d | %5.2f€ | %2d%% | %2d%% | %-3s |",
-                referencia, nombre, descripcion, tipo,
+                "| %-1s | %-10s | %-18s | %-3d | %3d | %5.2f€ | %2d%% | %2d%% | %-3s |",
+                ref, nombre, descripcion, tipo,
                 cantidad, precio, descuento, iva,
                 (aplicarDto ? "SÍ" : "NO")
         );
