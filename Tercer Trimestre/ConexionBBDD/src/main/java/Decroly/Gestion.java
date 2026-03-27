@@ -128,7 +128,11 @@ public class Gestion {
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    System.out.println(rs.getString("nombre"));
+                    System.out.println(
+                            rs.getString("referencia") + " | " +
+                                    rs.getString("nombre") + " | " +
+                                    rs.getString("descripcion")
+                    );
                     encontrado = true;
                 }
             }
@@ -152,7 +156,11 @@ public class Gestion {
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    System.out.println(rs.getString("nombre"));
+                    System.out.println(
+                            rs.getString("referencia") + " | " +
+                                    rs.getString("nombre") + " | " +
+                                    rs.getString("descripcion")
+                    );
                     encontrado = true;
                 }
             }

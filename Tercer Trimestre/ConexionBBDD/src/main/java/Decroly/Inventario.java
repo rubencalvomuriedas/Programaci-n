@@ -12,7 +12,8 @@ public class Inventario {
         int opcion = 0;
 
         do {
-            System.out.println("\n1. Mostrar productos");
+            System.out.println("\n--- MENÚ DE INVENTARIO ---");
+            System.out.println("1. Mostrar productos");
             System.out.println("2. Buscar por referencia");
             System.out.println("3. Buscar por tipo");
             System.out.println("4. Buscar por cantidad");
@@ -22,15 +23,7 @@ public class Inventario {
             System.out.println("8. Insertar tipo de producto");
             System.out.println("9. Salir");
 
-            System.out.println("Introduce el numero que desea: ");
-            if (!sc.hasNextInt()) {
-                System.out.println("Debes introducir un número");
-                sc.nextLine();
-                continue;
-            }
-
-            opcion = sc.nextInt();
-            sc.nextLine();
+            opcion = ValidadorDatos.obtenerEnteroValido("Introduce el número que desea: ", sc);
 
             try {
                 switch (opcion) {
@@ -40,162 +33,81 @@ public class Inventario {
                         break;
 
                     case 2:
-                        System.out.print("Referencia: ");
-                        dao.buscarPorReferencia(sc.nextLine());
+                        String refBusqueda = ValidadorDatos.obtenerTextoNoVacio("Referencia a buscar: ", sc);
+                        dao.buscarPorReferencia(refBusqueda);
                         break;
 
                     case 3:
-                        System.out.print("Tipo (Fruta, Verdura, Carne, Pescado, Lácteos, Panadería, Bebidas): ");
-                        dao.buscarPorTipo(sc.nextLine());
+                        String tipoBusqueda = ValidadorDatos.obtenerTextoNoVacio("Tipo (Fruta, Verdura, etc.): ", sc);
+                        dao.buscarPorTipo(tipoBusqueda);
                         break;
 
                     case 4:
-                        System.out.print("Cantidad: ");
-                        if (!sc.hasNextInt()) {
-                            System.out.println("Cantidad inválida");
-                            sc.nextLine();
-                            break;
-                        }
-                        dao.buscarPorCantidad(sc.nextInt());
-                        sc.nextLine();
+                        int cantBusqueda = ValidadorDatos.obtenerEnteroValido("Cantidad exacta a buscar: ", sc);
+                        dao.buscarPorCantidad(cantBusqueda);
                         break;
 
                     case 5:
-                        System.out.print("Referencia: ");
-                        String ref = sc.nextLine();
+                        System.out.println("\n Nuevo Producto ");
+                        String ref = ValidadorDatos.obtenerTextoNoVacio("Referencia: ", sc);
+                        String nom = ValidadorDatos.obtenerTextoNoVacio("Nombre: ", sc);
+                        String desc = ValidadorDatos.obtenerTextoNoVacio("Descripción: ", sc);
 
-                        System.out.print("Nombre: ");
-                        String nom = sc.nextLine();
-
-                        System.out.print("Descripción: ");
-                        String desc = sc.nextLine();
-
-                        System.out.print("Tipo: ");
-                        String nombreTipo = sc.nextLine();
-
-                        int tipo = dao.obtenerIdTipoPublico(nombreTipo);
-
-                        if (tipo == -1) {
-                            System.out.println("El tipo de producto no existe");
-                            break;
+                        int idTipo = -1;
+                        while (idTipo == -1) {
+                            String nombreTipo = ValidadorDatos.obtenerTextoNoVacio("Nombre del Tipo: ", sc);
+                            idTipo = dao.obtenerIdTipoPublico(nombreTipo);
+                            if (idTipo == -1) {
+                                System.out.println("El tipo '" + nombreTipo + "' no existe. Inténtalo de nuevo.");
+                            }
                         }
 
-                        System.out.print("Cantidad: ");
-                        if (!sc.hasNextInt()) {
-                            System.out.println("Cantidad inválida");
-                            sc.nextLine();
-                            break;
-                        }
-                        int cant = sc.nextInt();
+                        int cant = ValidadorDatos.obtenerEnteroValido("Cantidad: ", sc);
+                        double precio = ValidadorDatos.obtenerDoubleValido("Precio: ", sc);
+                        int dto = ValidadorDatos.obtenerEnteroValido("Descuento (%): ", sc);
+                        int iva = ValidadorDatos.obtenerEnteroValido("IVA (%): ", sc);
+                        boolean aplicar = ValidadorDatos.obtenerBooleanoValido("¿Aplicar descuento?", sc);
 
-                        System.out.print("Precio: ");
-                        if (!sc.hasNextDouble()) {
-                            System.out.println("Precio inválido");
-                            sc.nextLine();
-                            break;
-                        }
-                        double precio = sc.nextDouble();
-
-                        System.out.print("Descuento: ");
-                        if (!sc.hasNextInt()) {
-                            System.out.println("Descuento inválido");
-                            sc.nextLine();
-                            break;
-                        }
-                        int dto = sc.nextInt();
-
-                        System.out.print("IVA: ");
-                        if (!sc.hasNextInt()) {
-                            System.out.println("IVA inválido");
-                            sc.nextLine();
-                            break;
-                        }
-                        int iva = sc.nextInt();
-
-                        System.out.print("Aplicar descuento (true/false): ");
-                        if (!sc.hasNextBoolean()) {
-                            System.out.println("Valor inválido");
-                            sc.nextLine();
-                            break;
-                        }
-                        boolean aplicar = sc.nextBoolean();
-                        sc.nextLine();
-
-                        Producto p = new Producto(
-                                0, ref, nom, desc,
-                                tipo, cant, precio, dto, iva, aplicar
-                        );
-
+                        Producto p = new Producto(0, ref, nom, desc, idTipo, cant, precio, dto, iva, aplicar);
                         dao.insertar(p);
-                        System.out.println("Producto insertado correctamente");
+                        System.out.println("Producto insertado correctamente.");
                         break;
 
                     case 6:
-                        System.out.print("Referencia: ");
-                        dao.eliminar(sc.nextLine());
-                        System.out.println("Producto eliminado");
+                        String refEliminar = ValidadorDatos.obtenerTextoNoVacio("Referencia a eliminar: ", sc);
+                        dao.eliminar(refEliminar);
+                        System.out.println("Producto eliminado.");
                         break;
 
                     case 7:
-                        System.out.print("Referencia: ");
-                        String r = sc.nextLine();
-
-                        System.out.print("Nueva descripción: ");
-                        String nuevaDesc = sc.nextLine();
-
-                        System.out.print("Cantidad: ");
-                        if (!sc.hasNextInt()) {
-                            System.out.println("Cantidad inválida");
-                            sc.nextLine();
-                            break;
-                        }
-                        int c = sc.nextInt();
-
-                        System.out.print("Precio: ");
-                        if (!sc.hasNextDouble()) {
-                            System.out.println("Precio inválido");
-                            sc.nextLine();
-                            break;
-                        }
-                        double pr = sc.nextDouble();
-
-                        System.out.print("Descuento: ");
-                        if (!sc.hasNextInt()) {
-                            System.out.println("Descuento inválido");
-                            sc.nextLine();
-                            break;
-                        }
-                        int dto2 = sc.nextInt();
-
-                        System.out.print("Aplicar descuento (true/false): ");
-                        if (!sc.hasNextBoolean()) {
-                            System.out.println("Valor inválido");
-                            sc.nextLine();
-                            break;
-                        }
-                        boolean aplicar2 = sc.nextBoolean();
-                        sc.nextLine();
+                        System.out.println("\n ACTUALIZAR PRODUCTO ");
+                        String r = ValidadorDatos.obtenerTextoNoVacio("Referencia del producto: ", sc);
+                        String nuevaDesc = ValidadorDatos.obtenerTextoNoVacio("Nueva descripción: ", sc);
+                        int c = ValidadorDatos.obtenerEnteroValido("Nueva cantidad: ", sc);
+                        double pr = ValidadorDatos.obtenerDoubleValido("Nuevo precio: ", sc);
+                        int dto2 = ValidadorDatos.obtenerEnteroValido("Nuevo descuento: ", sc);
+                        boolean aplicar2 = ValidadorDatos.obtenerBooleanoValido("¿Aplicar descuento?", sc);
 
                         dao.actualizar(r, nuevaDesc, c, pr, dto2, aplicar2);
-                        System.out.println("Producto actualizado");
+                        System.out.println("Producto actualizado.");
                         break;
 
                     case 8:
-                        System.out.print("Nombre del tipo: ");
-                        dao.insertarTipo(sc.nextLine());
-                        System.out.println("Tipo insertado");
+                        String nuevoTipo = ValidadorDatos.obtenerTextoNoVacio("Nombre del nuevo tipo: ", sc);
+                        dao.insertarTipo(nuevoTipo);
+                        System.out.println("Tipo '" + nuevoTipo + "' registrado.");
                         break;
 
                     case 9:
-                        System.out.println("Saliendo...");
+                        System.out.println("Saliendo del sistema...");
                         break;
 
                     default:
-                        System.out.println("Opción no válida");
+                        System.out.println("Opción no válida. Intente entre 1 y 9.");
                 }
 
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println("ERROR: " + e.getMessage());
             }
 
         } while (opcion != 9);
