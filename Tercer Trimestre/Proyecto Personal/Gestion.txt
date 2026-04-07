@@ -1,0 +1,226 @@
+package Decroly;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Clase de Lógica de Negocio (DAO).
+ * Centraliza todas las operaciones de la BD (UD 8) y Ficheros (UD 6).
+ */
+public class Gestion {
+
+    // --- MÉTODOS DE CONSULTA (SELECT) ---
+
+    public void mostrarTodos() throws Exception {
+        String sql = "SELECT * FROM producto";
+        try (Connection con = ConexionBD.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            System.out.println("\n--- INVENTARIO COMPLETO ---");
+            while (rs.next()) {
+                // Creamos un objeto temporal para usar su toString()
+                System.out.println(String.format("ID: %d | Ref: %s | Nombre: %s | Stock: %d | Precio: %.2f€",
+                        rs.getInt("id"), rs.getString("referencia"), rs.getString("nombre"), 
+                        rs.getInt("cantidad"), rs.getDouble("precio")));
+            }
+        }
+    }
+
+    public void buscarPorReferencia(String ref) throws Exception {
+        String sql = "SELECT * FROM producto WHERE referencia = ?";
+        try (Connection con = ConexionBD.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            
+            ps.setString(1, ref);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    System.out.println("Encontrado: " + rs.getString("nombre") + " - Stock: " + rs.getInt("cantidad"));
+                } else {
+                    throw new ProductoNoEncontradoException("No existe ningún producto con referencia: " + ref);
+                }
+            }
+        }
+    }
+
+    // --- MÉTODOS DE MODIFICACIÓN (INSERT, UPDATE, DELETE) ---
+
+    public void insertarJuego(Juego j) throws Exception {
+        // Primero comprobamos si la referencia ya existe para lanzar nuestra excepción personalizada (UD 5)
+        if (existeReferencia(j.getReferencia())) {
+            throw new ReferenciaDuplicadaException("La referencia " + j.getReferencia() + " ya está registrada.");
+        }
+
+        String sql = "INSERT INTO producto (referencia, nombre, descripcion, cantidad, precio, plataforma, genero) VALUES (?,?,?,?,?,?,?)";
+        try (Connection con = ConexionBD.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            
+            ps.setString(1, j.getReferencia());
+            ps.setString(2, j.getNombre());
+            ps.setString(3, j.getDescripcion());
+            ps.setInt(4, j.getCantidad());
+            ps.setDouble(5, j.getPrecio());
+            ps.setString(6, j.getPlataforma());
+            ps.setString(7, j.getGenero());
+            
+            ps.executeUpdate();
+        }
+    }
+
+    public void eliminarProducto(String ref) throws Exception {
+        String sql = "DELETE FROM producto WHERE referencia = ?";
+        try (Connection con = ConexionBD.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            
+            ps.setString(1, ref);
+            int filasAffected = ps.executeUpdate();
+            if (filasAffected == 0) {
+                throw new ProductoNoEncontradoException("No se pudo eliminar: la referencia no existe.");
+            }
+        }
+    }
+
+    public void actualizarStock(String ref, int nuevaCantidad) throws Exception {
+        String sql = "UPDATE producto SET cantidad = ? WHERE referencia = ?";
+        try (Connection con = ConexionBD.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            
+            ps.setInt(1, nuevaCantidad);
+            ps.setString(2, ref);
+            ps.executeUpdate();
+        }
+    }
+
+    // --- MÉTODO DE VENTA Y FICHERO (UD 6.2) ---
+
+    public void venderJuego(String ref, int unidades) throws Exception {
+        // 1. Buscamos el juego en la BD
+        String sql = "SELECT nombre, cantidad, precio FROM producto WHERE referencia = ?";
+        try (Connection con = ConexionBD.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            
+            ps.setString(1, ref);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int stockActual = rs.getInt("cantidad");
+                    if (stockActual < unidades) {
+                        throw new StockAgotadoException("Stock insuficiente. Disponible: " + stockActual);
+                    }
+                    
+                    // 2. Actualizamos la BD
+                    actualizarStock(ref, stockActual - unidades);
+                    
+                    // 3. Generamos Ticket en TXT (UD 6.2)
+                    generarTicket(rs.getString("nombre"), unidades, rs.getDouble("precio"));
+                    System.out.println("Venta realizada. Ticket generado.");
+                    
+                } else {
+                    throw new ProductoNoEncontradoException("Producto no encontrado.");
+                }
+            }
+        }
+    }
+
+    import java.time.LocalDateTime; // UD 3.4 - API de fechas
+import java.time.format.DateTimeFormatter;
+
+private void generarTicket(String nombre, int cant, double precio) {
+    // 1. Capturamos la fecha y hora actual
+    LocalDateTime ahora = LocalDateTime.now();
+    
+    // 2. Le damos un formato legible (dd/MM/yyyy HH:mm)
+    DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+    String fechaFormateada = ahora.format(formato);
+
+    // 3. Creamos el nombre del archivo con un timestamp para que sea único
+    String nombreFichero = "ticket_" + ahora.getMinute() + ahora.getSecond() + ".txt";
+
+    try (BufferedWriter bw = new BufferedWriter(new FileWriter(nombreFichero))) {
+        bw.write("=====================================");
+        bw.newLine();
+        bw.write("       TICKET DE VENTA - GAME        ");
+        bw.newLine();
+        bw.write("=====================================");
+        bw.newLine();
+        bw.write("FECHA: " + fechaFormateada); // <-- Aquí sale la fecha real
+        bw.newLine();
+        bw.write("PRODUCTO: " + nombre);
+        bw.newLine();
+        bw.write("CANTIDAD: " + cant);
+        bw.newLine();
+        bw.write("PRECIO UNIDAD: " + precio + "€");
+        bw.newLine();
+        bw.write("-------------------------------------");
+        bw.newLine();
+        bw.write("TOTAL A PAGAR: " + (cant * precio) + "€");
+        bw.newLine();
+        bw.write("=====================================");
+        bw.newLine();
+        bw.write("¡Gracias por su compra!");
+
+        System.out.println("Archivo creado con éxito: " + nombreFichero);
+
+    } catch (IOException e) {
+        System.err.println("Error al escribir el ticket: " + e.getMessage());
+    }
+}
+
+	public void buscarPorPlataforma(String plataforma) throws Exception {
+    	// Usamos LIKE para una búsqueda más flexible (ej. que contenga la palabra)
+    	String sql = "SELECT * FROM producto WHERE plataforma LIKE ?";
+    
+    	try (Connection con = ConexionBD.getConnection();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+        
+        ps.setString(1, "%" + plataforma + "%");
+        
+        try (ResultSet rs = ps.executeQuery()) {
+            System.out.println("\n--- RESULTADOS PARA: " + plataforma.toUpperCase() + " ---");
+            boolean hayResultados = false;
+            
+            while (rs.next()) {
+                hayResultados = true;
+                System.out.println(String.format("[%s] %s - Precio: %.2f€ - Stock: %d",
+                        rs.getString("referencia"),
+                        rs.getString("nombre"),
+                        rs.getDouble("precio"),
+                        rs.getInt("cantidad")));
+            }
+            
+            if (!hayResultados) {
+                System.out.println("No se encontraron juegos para esa plataforma.");
+            }
+        }
+    // Método auxiliar privado
+    private boolean existeReferencia(String ref) throws Exception {
+        String sql = "SELECT 1 FROM producto WHERE referencia = ?";
+        try (Connection con = ConexionBD.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, ref);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        }
+    /**
+ * Calcula el valor total de todo el stock de la tienda (UD 8.2 - Funciones Agregadas)
+ * Multiplica el precio por la cantidad de cada producto y los suma.
+ */
+public void calcularValorTotalInventario() throws Exception {
+    // Usamos SUM() para que MySQL calcule el total rápidamente
+    String sql = "SELECT SUM(precio * cantidad) AS valor_total FROM producto";
+    
+    try (Connection con = ConexionBD.getConnection();
+         PreparedStatement ps = con.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+        
+        if (rs.next()) {
+            double total = rs.getDouble("valor_total");
+            System.out.println("   INFORME FINANCIERO DE LA TIENDA");
+            System.out.format(" VALOR TOTAL DEL STOCK: %.2f €\n", total);
+        }
+    }
+}

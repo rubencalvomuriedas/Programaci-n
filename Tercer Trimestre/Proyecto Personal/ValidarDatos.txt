@@ -1,0 +1,67 @@
+package Decroly;
+
+import java.util.Scanner;
+
+/**
+ * Clase de utilidad para validar entradas de usuario (UD 2.1)
+ * Evita que el programa falle por errores de formato (UD 5.1)
+ */
+public class ValidadorDatos {
+
+    /**
+     * Solicita un número entero y vuelve a preguntar si el formato es incorrecto
+     */
+    public static int obtenerEnteroValido(String mensaje, Scanner sc) {
+        while (true) {
+            System.out.print(mensaje);
+            String entrada = sc.nextLine().trim();
+            try {
+                return Integer.parseInt(entrada);
+            } catch (NumberFormatException e) {
+                System.out.println(" Error: Debes introducir un número entero válido.");
+            }
+        }
+    }
+
+    /**
+     * Solicita un número decimal (double)
+     */
+    public static double obtenerDoubleValido(String mensaje, Scanner sc) {
+        while (true) {
+            System.out.print(mensaje);
+            String entrada = sc.nextLine().trim().replace(",", "."); // Acepta coma o punto
+            try {
+                return Double.parseDouble(entrada);
+            } catch (NumberFormatException e) {
+                System.out.println(" Error: Debes introducir un precio o valor decimal válido.");
+            }
+        }
+    }
+
+    /**
+     * Asegura que el usuario no deje un campo obligatorio vacío
+     */
+    public static String obtenerTextoNoVacio(String mensaje, Scanner sc) {
+        while (true) {
+            System.out.print(mensaje);
+            String entrada = sc.nextLine().trim();
+            if (!entrada.isEmpty()) {
+                return entrada;
+            }
+            System.out.println(" Error: Este campo es obligatorio y no puede estar vacío.");
+        }
+    }
+
+    /**
+     * Valida respuestas de tipo sí o no (UD 2.2 - Estructuras de control)
+     */
+    public static boolean obtenerBooleanoValido(String mensaje, Scanner sc) {
+        while (true) {
+            System.out.print(mensaje + " (si/no): ");
+            String entrada = sc.nextLine().trim().toLowerCase();
+            if (entrada.equals("si") || entrada.equals("s")) return true;
+            if (entrada.equals("no") || entrada.equals("n")) return false;
+            System.out.println(" Error: Por favor, responde 'si' o 'no'.");
+        }
+    }
+}

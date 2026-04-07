@@ -1,0 +1,13 @@
+package Decroly;
+
+/**
+ * Excepción personalizada para el control de inventario (UD 5.2)
+ * Se lanza cuando no hay unidades disponibles para vender.
+ */
+public class StockAgotadoException extends Exception {
+
+    // Constructor que recibe un mensaje personalizado
+    public StockAgotadoException(String mensaje) {
+        super(mensaje);
+    }
+}

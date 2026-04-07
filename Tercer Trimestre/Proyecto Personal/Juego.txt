@@ -1,0 +1,59 @@
+package Decroly;
+
+import java.io.Serializable;
+
+/**
+ * Clase Hija Juego
+ * Hereda de Producto (UD 3.2)
+ * Añade especialización para la Tienda de Videojuegos
+ */
+public class Juego extends Producto implements Serializable {
+    
+    // Atributos específicos de la subclase (UD 3.1)
+    private String plataforma; // Ejemplo: PS5, PC, Switch
+    private String genero;     // Ejemplo: RPG, Shooter, Aventuras
+
+    /**
+     * Constructor completo
+     * Recibe todos los parámetros del padre + los específicos del hijo
+     */
+    public Juego(int id, String ref, String nombre, String descripcion, int tipo, 
+                 int cantidad, double precio, int descuento, int iva, 
+                 boolean aplicarDto, String plataforma, String genero) {
+        
+        // Llamada obligatoria al constructor del padre (UD 3.2)
+        super(id, ref, nombre, descripcion, tipo, cantidad, precio, descuento, iva, aplicarDto);
+        
+        // Asignación de atributos propios
+        this.plataforma = plataforma;
+        this.genero = genero;
+    }
+
+    /**
+     * Constructor simplificado para altas rápidas en tu proyecto
+     */
+    public Juego(String ref, String nombre, String plataforma, double precio, int cantidad) {
+        // Pasamos datos por defecto al padre (id=0, sin dto, iva 21%)
+        super(0, ref, nombre, "Sin descripción", 0, cantidad, precio, 0, 21, false);
+        this.plataforma = plataforma;
+        this.genero = "General";
+    }
+
+    // GETTERS Y SETTERS específicos (UD 3.1)
+    public String getPlataforma() { return plataforma; }
+    public void setPlataforma(String plataforma) { this.plataforma = plataforma; }
+
+    public String getGenero() { return genero; }
+    public void setGenero(String genero) { this.genero = genero; }
+
+    /**
+     * Sobrescritura del método toString (UD 3.1)
+     * Reutilizamos parte del comportamiento del padre con super.toString() 
+     * o creamos un formato totalmente nuevo.
+     */
+    @Override
+    public String toString() {
+        return String.format("GAME [%s] %-20s | %-10s | %-10s | Stock: %d | Precio: %.2f€", 
+                getReferencia(), getNombre(), plataforma, genero, getCantidad(), getPrecio());
+    }
+}
