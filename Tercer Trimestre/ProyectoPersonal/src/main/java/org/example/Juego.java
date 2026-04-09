@@ -1,9 +1,17 @@
 package org.example;
 
 import java.io.Serializable;
+import java.util.Objects;
 
-
+/**
+ * Clase Juego: Mantiene la herencia de Producto (UD 3.2)
+ * e implementa Serializable (UD 6.3).
+ */
 public class Juego extends Producto implements Serializable {
+
+    private static final int IVA_POR_DEFECTO = 21;
+    private static final String GENERO_POR_DEFECTO = "General";
+    private static final String DESC_POR_DEFECTO = "Sin descripción";
 
     private String plataforma;
     private String genero;
@@ -14,14 +22,16 @@ public class Juego extends Producto implements Serializable {
 
         super(id, ref, nombre, descripcion, tipo, cantidad, precio, descuento, iva, aplicarDto);
 
+        if (precio < 0 || cantidad < 0) {
+            throw new IllegalArgumentException("El precio y la cantidad no pueden ser negativos");
+        }
+
         this.plataforma = plataforma;
         this.genero = genero;
     }
 
     public Juego(String ref, String nombre, String plataforma, double precio, int cantidad) {
-        super(0, ref, nombre, "Sin descripción", 0, cantidad, precio, 0, 21, false);
-        this.plataforma = plataforma;
-        this.genero = "General";
+        this(0, ref, nombre, DESC_POR_DEFECTO, 0, cantidad, precio, 0, IVA_POR_DEFECTO, false, plataforma, GENERO_POR_DEFECTO);
     }
 
     public String getPlataforma() { return plataforma; }
@@ -29,6 +39,19 @@ public class Juego extends Producto implements Serializable {
 
     public String getGenero() { return genero; }
     public void setGenero(String genero) { this.genero = genero; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Juego juego = (Juego) o;
+        return Objects.equals(getReferencia(), juego.getReferencia());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getReferencia());
+    }
 
     @Override
     public String toString() {

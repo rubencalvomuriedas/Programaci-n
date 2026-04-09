@@ -2,51 +2,62 @@ package org.example;
 
 import java.util.Scanner;
 
-
 public class ValidadorDatos {
 
-    public static int obtenerEnteroValido(String mensaje, Scanner sc) {
+    private static final Scanner sc = new Scanner(System.in);
+
+    public static int obtenerEnteroValido(String mensaje) {
         while (true) {
             System.out.print(mensaje);
             String entrada = sc.nextLine().trim();
             try {
-                return Integer.parseInt(entrada);
+                int valor = Integer.parseInt(entrada);
+                if (valor < 0) {
+                    System.out.println(" Error: El número no puede ser negativo.");
+                    continue;
+                }
+                return valor;
             } catch (NumberFormatException e) {
                 System.out.println(" Error: Debes introducir un número entero válido.");
             }
         }
     }
 
-    public static double obtenerDoubleValido(String mensaje, Scanner sc) {
+    public static double obtenerDoubleValido(String mensaje) {
         while (true) {
             System.out.print(mensaje);
-            String entrada = sc.nextLine().trim().replace(",", "."); // Acepta coma o punto
+            String entrada = sc.nextLine().trim().replace(",", ".");
             try {
-                return Double.parseDouble(entrada);
+                double valor = Double.parseDouble(entrada);
+                if (valor < 0) {
+                    System.out.println(" Error: El valor no puede ser negativo.");
+                    continue;
+                }
+                return valor;
             } catch (NumberFormatException e) {
-                System.out.println(" Error: Debes introducir un precio o valor decimal válido.");
+                System.out.println(" Error: Debes introducir un decimal válido (ej: 19.99).");
             }
         }
     }
 
-    public static String obtenerTextoNoVacio(String mensaje, Scanner sc) {
+    public static String obtenerTextoNoVacio(String mensaje) {
         while (true) {
             System.out.print(mensaje);
             String entrada = sc.nextLine().trim();
             if (!entrada.isEmpty()) {
                 return entrada;
             }
-            System.out.println(" Error: Este campo es obligatorio y no puede estar vacío.");
+            System.out.println(" Error: Este campo es obligatorio.");
         }
     }
 
-    public static boolean obtenerBooleanoValido(String mensaje, Scanner sc) {
+    public static boolean obtenerBooleanoValido(String mensaje) {
         while (true) {
-            System.out.print(mensaje + " (si/no): ");
+            System.out.print(mensaje + " (s/n): ");
             String entrada = sc.nextLine().trim().toLowerCase();
             if (entrada.equals("si") || entrada.equals("s")) return true;
             if (entrada.equals("no") || entrada.equals("n")) return false;
-            System.out.println(" Error: Por favor, responde 'si' o 'no'.");
+            System.out.println(" Error: Responde 's' para sí o 'n' para no.");
         }
     }
 }

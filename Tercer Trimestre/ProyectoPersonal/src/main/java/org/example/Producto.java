@@ -5,11 +5,14 @@ import java.util.Objects;
 
 public class Producto implements Serializable {
 
+    private static final int IVA_DEFECTO = 21;
+    private static final String DESC_VACIA = "Sin descripción";
+
     private int id;
     private String ref;
     private String nombre;
     private String descripcion;
-    private int tipo; // ID de la tabla tipos
+    private int tipo;
     private int cantidad;
     private double precio;
     private int descuento;
@@ -18,10 +21,15 @@ public class Producto implements Serializable {
 
     public Producto(int id, String ref, String nombre, String descripcion, int tipo,
                     int cantidad, double precio, int descuento, int iva, boolean aplicarDto) {
+
+        if (precio < 0) throw new IllegalArgumentException("El precio no puede ser negativo");
+        if (cantidad < 0) throw new IllegalArgumentException("El stock no puede ser negativo");
+        if (iva < 0) throw new IllegalArgumentException("El IVA no puede ser negativo");
+
         this.id = id;
         this.ref = ref;
         this.nombre = nombre;
-        this.descripcion = descripcion;
+        this.descripcion = (descripcion == null || descripcion.isEmpty()) ? DESC_VACIA : descripcion;
         this.tipo = tipo;
         this.cantidad = cantidad;
         this.precio = precio;
@@ -31,11 +39,7 @@ public class Producto implements Serializable {
     }
 
     public Producto(String ref, String nombre, int cantidad, double precio) {
-        this.ref = ref;
-        this.nombre = nombre;
-        this.cantidad = cantidad;
-        this.precio = precio;
-        this.iva = 21; // IVA por defecto
+        this(0, ref, nombre, DESC_VACIA, 0, cantidad, precio, 0, IVA_DEFECTO, false);
     }
 
     public int getId() { return id; }

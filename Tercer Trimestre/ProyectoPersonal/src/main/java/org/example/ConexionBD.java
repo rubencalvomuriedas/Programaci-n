@@ -2,22 +2,25 @@ package org.example;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class ConexionBD {
 
-    private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
-
-    public static Connection getConnection() throws Exception {
-        Class.forName(DRIVER);
+    public static Connection getConnection() throws SQLException {
 
         String url = Configuracion.get("url");
         String user = Configuracion.get("user");
         String pass = Configuracion.get("password");
 
         if (url == null || user == null || pass == null) {
-            throw new Exception("Faltan credenciales en el archivo de configuración.");
+            throw new SQLException("Error crítico: Faltan parámetros (url, user o password) en el archivo .dat");
         }
 
-        return DriverManager.getConnection(url, user, pass);
+        try {
+            return DriverManager.getConnection(url, user, pass);
+        } catch (SQLException e) {
+            System.err.println("Error de conexión (Verifica si MySQL está activo): " + e.getMessage());
+            throw e;
+        }
     }
 }
