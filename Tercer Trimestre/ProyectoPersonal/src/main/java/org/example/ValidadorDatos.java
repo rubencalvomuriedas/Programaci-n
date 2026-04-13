@@ -1,6 +1,7 @@
 package org.example;
 
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class ValidadorDatos {
 
@@ -13,12 +14,12 @@ public class ValidadorDatos {
             try {
                 int valor = Integer.parseInt(entrada);
                 if (valor < 0) {
-                    System.out.println(" Error: El número no puede ser negativo.");
+                    System.out.println("  Error: El número no puede ser negativo.");
                     continue;
                 }
                 return valor;
             } catch (NumberFormatException e) {
-                System.out.println(" Error: Debes introducir un número entero válido.");
+                System.out.println("  Error: Debes introducir un número entero válido.");
             }
         }
     }
@@ -48,6 +49,20 @@ public class ValidadorDatos {
                 return entrada;
             }
             System.out.println(" Error: Este campo es obligatorio.");
+        }
+    }
+
+
+    public static String obtenerDniValido(String mensaje) {
+        while (true) {
+            System.out.print(mensaje);
+            String dni = sc.nextLine().trim().toUpperCase();
+
+
+            if (Pattern.matches("^[0-9]{8}[A-Z]$", dni)) {
+                return dni;
+            }
+            System.out.println(" Error: Formato de DNI inválido (deben ser 8 números y 1 letra, ej: 12345678X).");
         }
     }
 

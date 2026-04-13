@@ -16,6 +16,12 @@ public class Juego extends Producto implements Serializable {
     private String plataforma;
     private String genero;
 
+    // NUEVO: Constructor vacío para que la lista dinámica funcione
+    // Nota: Asegúrate de que la clase Producto también tenga un constructor vacío
+    public Juego() {
+        super();
+    }
+
     public Juego(int id, String ref, String nombre, String descripcion, int tipo,
                  int cantidad, double precio, int descuento, int iva,
                  boolean aplicarDto, String plataforma, String genero) {
@@ -55,7 +61,7 @@ public class Juego extends Producto implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("GAME [%s] %-20s | %-10s | %-10s | Stock: %d | Precio: %.2f€",
+        return String.format("GAME [%s] %-20s | %-11s | %-10s | Stock: %d | Precio: %.2f€",
                 getReferencia(), getNombre(), plataforma, genero, getCantidad(), getPrecio());
     }
 }

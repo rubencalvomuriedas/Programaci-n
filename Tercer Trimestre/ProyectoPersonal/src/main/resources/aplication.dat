@@ -1,3 +1,5 @@
-url=jdbc:mysql://localhost:3306/game
+driver=com.mysql.cj.jdbc.Driver
+url=jdbc:mysql://localhost:3306/
+schema=game
 user=developer
 password=developer

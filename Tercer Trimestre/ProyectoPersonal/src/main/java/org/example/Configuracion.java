@@ -6,7 +6,7 @@ import java.util.Properties;
 
 public class Configuracion {
 
-    private static final String ARCHIVO_CONFIG = "application.dat";
+    private static final String ARCHIVO_CONFIG = "aplication.dat";
     private static final Properties props = new Properties();
 
     static {

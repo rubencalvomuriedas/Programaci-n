@@ -2,7 +2,6 @@ CREATE DATABASE IF NOT EXISTS game;
 USE game;
 
 DROP TABLE IF EXISTS producto;
-
 CREATE TABLE producto (
     id INT AUTO_INCREMENT PRIMARY KEY,
     referencia VARCHAR(20) UNIQUE NOT NULL,
@@ -16,6 +15,15 @@ CREATE TABLE producto (
     descuento INT DEFAULT 0,
     iva INT DEFAULT 21,
     aplicar_dto BOOLEAN DEFAULT FALSE
+);
+
+DROP TABLE IF EXISTS cliente;
+
+CREATE TABLE cliente (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    dni VARCHAR(9) UNIQUE NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    direccion VARCHAR(255)
 );
 
 INSERT INTO producto (referencia, nombre, descripcion, cantidad, precio, plataforma, genero) VALUES
@@ -32,7 +40,7 @@ INSERT INTO producto (referencia, nombre, descripcion, cantidad, precio, platafo
 ('PS5-010', 'Stellar Blade', 'Acción estilizada', 9, 69.99, 'PS5', 'Acción'),
 
 -- NINTENDO SWITCH
-('NSW-001', 'Zelda: Tears of the Kingdom', 'Aventura en Hyrule', 25, 59.90, 'Switch', 'Aventura'),
+('NSW-001', 'Zelda:Tears of Kingdom', 'Aventura en Hyrule', 25, 59.90, 'Switch', 'Aventura'),
 ('NSW-002', 'Mario Kart 8 Deluxe', 'Carreras locas', 30, 49.95, 'Switch', 'Carreras'),
 ('NSW-003', 'Animal Crossing', 'Simulador de vida', 15, 45.00, 'Switch', 'Simulación'),
 ('NSW-004', 'Metroid Dread', 'Acción lateral', 6, 39.99, 'Switch', 'Metroidvania'),
@@ -41,7 +49,7 @@ INSERT INTO producto (referencia, nombre, descripcion, cantidad, precio, platafo
 ('NSW-007', 'Pokemon Escarlata', 'RPG de monstruos', 22, 54.90, 'Switch', 'RPG'),
 ('NSW-008', 'Luigis Mansion 3', 'Aventura de fantasmas', 7, 42.00, 'Switch', 'Aventura'),
 ('NSW-009', 'Fire Emblem Engage', 'Estrategia táctica', 5, 49.99, 'Switch', 'Estrategia'),
-('NSW-010', 'Kirby and the Forgotten Land', 'Plataformas 3D', 9, 45.00, 'Switch', 'Plataformas'),
+('NSW-010', 'Kirby Forgotten Land', 'Plataformas 3D', 9, 45.00, 'Switch', 'Plataformas'),
 
 -- XBOX
 ('XBX-001', 'Halo Infinite', 'Shooter legendario', 14, 40.00, 'Xbox', 'Shooter'),
@@ -67,3 +75,4 @@ INSERT INTO producto (referencia, nombre, descripcion, cantidad, precio, platafo
 ('MUL-009', 'Persona 5 Royal', 'JRPG social', 7, 45.00, 'Multi', 'RPG'),
 ('MUL-010', 'Doom Eternal', 'Shooter frenético', 6, 20.00, 'Multi', 'Shooter');
 
+SELECT * FROM producto;
