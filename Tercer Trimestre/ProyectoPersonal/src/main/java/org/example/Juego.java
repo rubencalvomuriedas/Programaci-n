@@ -3,10 +3,7 @@ package org.example;
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * Clase Juego: Mantiene la herencia de Producto (UD 3.2)
- * e implementa Serializable (UD 6.3).
- */
+
 public class Juego extends Producto implements Serializable {
 
     private static final int IVA_POR_DEFECTO = 21;
@@ -16,8 +13,7 @@ public class Juego extends Producto implements Serializable {
     private String plataforma;
     private String genero;
 
-    // NUEVO: Constructor vacío para que la lista dinámica funcione
-    // Nota: Asegúrate de que la clase Producto también tenga un constructor vacío
+
     public Juego() {
         super();
     }

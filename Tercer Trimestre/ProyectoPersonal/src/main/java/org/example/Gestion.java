@@ -201,7 +201,7 @@ public class Gestion {
             ps.setString(1, prefijo + "-%");
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    String ultimaRef = rs.getString("referencia"); // Ej: "PS5-005"
+                    String ultimaRef = rs.getString("referencia");
                     int ultimoNumero = Integer.parseInt(ultimaRef.split("-")[1]);
                     return String.format("%s-%03d", prefijo, ultimoNumero + 1);
                 }
@@ -243,30 +243,6 @@ public class Gestion {
         return lista;
     }
 
-//    public static int generarIdJuego() {
-//        String sql = "SELECT MAX(ID) AS ULTIMO FROM PRODUCTO";
-//        int siguiente = 1;
-//
-//        try (Connection con = ConexionBD.getConnection();
-//             Statement st = con.createStatement();
-//             ResultSet rs = st.executeQuery(sql)) {
-//
-//            if (rs.next()) {
-//                String ultimo = rs.getString("ULTIMO");
-//
-//                if (ultimo != null) {
-//                    int num = Integer.parseInt(ultimo);
-//                    siguiente = num + 1;
-//                }
-//            }
-//
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//        }
-//
-//        return siguiente;
-//    }
-
     public static int generarIdJuego() {
 
         String sql = "SELECT (t1.id + 1) AS disponible " +
@@ -279,7 +255,7 @@ public class Gestion {
              Statement st = con.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
 
-            // Primero comprobamos si el ID 1 está libre (caso especial)
+
             if (!idExiste(1)) {
                 return 1;
             }
