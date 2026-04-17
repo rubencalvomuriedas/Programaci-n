@@ -3,10 +3,22 @@ package Decroly;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
+/**
+ * Clase de utilidad para la validación y captura de datos por consola.
+ * <p>Proporciona métodos estáticos que garantizan que la entrada del usuario
+ * cumpla con los formatos requeridos antes de procesarlos en la aplicación.</p>
+ * * @author Tu Nombre o Equipo de Desarrollo
+ * @version 1.0
+ */
 public class ValidadorDatos {
 
-    //private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
+    /**
+     * Solicita y valida una entrada booleana permitiendo múltiples variantes de respuesta.
+     * * @param mensaje El texto descriptivo que se mostrará al usuario.
+     * @param sc El objeto {@link Scanner} para leer la entrada.
+     * @return {@code true} si el usuario introduce 'si', 's' o 'true';
+     * {@code false} si introduce 'no', 'n' o 'false'.
+     */
     public static boolean obtenerBooleanoValido(String mensaje, Scanner sc) {
         while (true) {
             System.out.print(mensaje + " (si/no): ");
@@ -18,6 +30,12 @@ public class ValidadorDatos {
         }
     }
 
+    /**
+     * Solicita una cadena de texto y garantiza que no esté vacía o compuesta solo por espacios.
+     * * @param mensaje Instrucción que se mostrará al usuario.
+     * @param sc Instancia de {@link Scanner}.
+     * @return La cadena de texto validada.
+     */
     public static String obtenerTextoNoVacio(String mensaje, Scanner sc) {
         while (true) {
             System.out.print(mensaje);
@@ -29,6 +47,13 @@ public class ValidadorDatos {
         }
     }
 
+    /**
+     * Solicita un número entero y valida que la entrada contenga exclusivamente dígitos.
+     * <p>Utiliza la expresión regular {@code \d+} para verificar el formato antes del parsing.</p>
+     * * @param mensaje Instrucción para el usuario.
+     * @param sc Instancia de {@link Scanner}.
+     * @return El valor entero validado.
+     */
     public static int obtenerEnteroValido(String mensaje, Scanner sc) {
         while (true) {
             System.out.print(mensaje);
@@ -40,63 +65,22 @@ public class ValidadorDatos {
         }
     }
 
+    /**
+     * Solicita un número decimal (double) y valida su formato.
+     * <p>Se requiere el uso del punto (.) como separador decimal conforme al estándar técnico.</p>
+     * * @param mensaje Instrucción para el usuario.
+     * @param sc Instancia de {@link Scanner}.
+     * @return El valor decimal validado.
+     */
     public static double obtenerDoubleValido(String mensaje, Scanner sc) {
         while (true) {
             System.out.print(mensaje);
             String entrada = sc.nextLine().trim();
+            // Regex para números enteros o decimales con punto
             if (entrada.matches("\\d+(\\.\\d+)?")) {
                 return Double.parseDouble(entrada);
             }
             System.out.println("Error: Formato de precio inválido (usa el punto para decimales, ej: 19.99).");
         }
     }
-
-
-//    public String obtenerCodBibliotecaValido() {
-//      Scanner sc = new Scanner(System.in);
-//      String codigo;
-
-//      while (true) {
-//            System.out.println("Ingrese el código de la biblioteca (Ej: ABC123):");
-//            codigo = sc.nextLine().toUpperCase();
-
-//            if (codigo.matches("^[A-Z]{3}\\d{3}$")) {
-//                return codigo;
-//            }
-//            System.out.println("Código inválido. Intente de nuevo.");
-//        }
-//    }
-
-//    public String obtenerCIFValido (String mensaje, Scanner scanner) {
-//        Scanner sc = new Scanner(System.in);
-//        String cif;
-//        while (true) {
-//            System.out.println("Ingrese un CIF valido para la empresa (Ejemplo: A1234567891):");
-//            cif = sc.nextLine().toUpperCase();
-//            if (validarCIF(cif)) {
-//                System.out.println("\nCIF admitido correctamente.");
-//                return cif;
-//
-//            }
-//            System.out.println("CIF invalido. Por favor vuelva a intentarlo.");
-//        }
-//    }
-//    private static boolean validarCIF(String cif) {
-//        return cif.matches("^[A-Z]\\d{10}$");
-//    }
-//
-//
-//    public  boolean esEmailValido(String email) {
-//        return email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,7}$");
-//    }
-//
-//    public boolean esTelefonoValido(String tel) {
-//        return tel.matches("^(\\+\\d{1,3})?\\d{9,12}$");
-//    }
-//
-//    public  boolean esNumeroSS(String SS) {
-//        return SS.matches("^\\d{10}$");
-//    }
-
-
 }

@@ -2,8 +2,22 @@ package Decroly;
 
 import java.util.Scanner;
 
+/**
+ * Clase principal que actúa como la interfaz de usuario por consola (CLI).
+ * <p>Esta clase gestiona el bucle principal de la aplicación, presenta el menú
+ * de opciones al usuario y coordina las llamadas a la lógica de negocio en la clase {@link Gestion}.</p>
+ * * @author Tu Nombre o Equipo de Desarrollo
+ * @version 1.0
+ */
 public class Inventario {
 
+    /**
+     * Método de entrada principal (Entry Point) que arranca la aplicación de inventario.
+     * <p>El método inicializa el escáner para la entrada de datos, el objeto de acceso
+     * a datos (DAO) y ejecuta un bucle {@code do-while} para mantener el menú activo
+     * hasta que el usuario decida salir.</p>
+     * * @param args Argumentos de línea de comandos (no utilizados en esta aplicación).
+     */
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
@@ -23,6 +37,7 @@ public class Inventario {
             System.out.println("8. Insertar tipo de producto");
             System.out.println("9. Salir");
 
+            // Uso de clase de utilidad para garantizar que la entrada sea un entero
             opcion = ValidadorDatos.obtenerEnteroValido("Introduce el número que desea: ", sc);
 
             try {
@@ -53,6 +68,7 @@ public class Inventario {
                         String nom = ValidadorDatos.obtenerTextoNoVacio("Nombre: ", sc);
                         String desc = ValidadorDatos.obtenerTextoNoVacio("Descripción: ", sc);
 
+                        // Lógica de validación de tipo de producto
                         int idTipo = -1;
                         while (idTipo == -1) {
                             String nombreTipo = ValidadorDatos.obtenerTextoNoVacio("Nombre del Tipo: ", sc);
@@ -107,6 +123,7 @@ public class Inventario {
                 }
 
             } catch (Exception e) {
+                // Captura centralizada de errores para evitar que la aplicación se cierre abruptamente
                 System.out.println("ERROR: " + e.getMessage());
             }
 
